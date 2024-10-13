@@ -1,0 +1,337 @@
+/*
+    DEMO STYLE
+*/
+
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #fafafa;
+}
+
+p {
+    font-size: 1.1em;
+    font-weight: 300;
+    line-height: 1.7em;
+    
+}
+
+
+#popup p {
+    font-size: 14px;
+    color: #000;
+    background-color: rgb(213,206,204);
+}
+
+#popup div{
+    font-size: 14px;
+    color: #000;
+}
+
+
+.navbar {
+    padding: 3px 10px;
+    background: #fff;
+    border: none;
+    border-radius: 0;
+    margin-bottom: 40px;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-btn {
+    box-shadow: none;
+    outline: none !important;
+    border: none;
+}
+
+.line {
+    width: 100%;
+    height: 1px;
+    border-bottom: 1px dashed #ddd;
+    margin: 40px 0;
+}
+
+/* ---------------------------------------------------
+    SIDEBAR STYLE
+----------------------------------------------------- */
+
+#sidebar {
+    /*width: 380px;*/
+    position: fixed;    
+    top: 70px;
+    right: 0;
+    bottom: 30px;
+    z-index: 10000;
+    color: #fff;
+    transition: all 0.3s;
+
+}
+
+#sidebar.active {
+    margin-right: -340px;
+}
+
+#sidebar_contenedor{
+    display: flex; 
+    width: 380px;
+}
+
+#sidebar_contenido{
+    /*background-color: #f0f0f0; */
+    /*border: #f0f0f0; 
+    border-style: groove; */
+    width: 350px;
+}
+
+#sidebar .sidebar-header {
+    padding: 20px;
+    background: #6d7fcc;
+}
+
+#sidebar ul.components {
+    /*padding: 20px 0;
+    border-bottom: 1px solid #47748b;*/
+}
+
+#sidebar ul p {
+    color: rgba(0,0,0);
+    font-size: 21px;
+    padding: 10px;
+}
+
+#sidebar ul li {
+    background: fixed; /*white*/
+}
+
+#sidebar ul li .dropdown-toggle{
+    padding: 10px;
+    color: black;
+    font-size: 1.1em;
+    display: block;
+}
+
+/*#sidebar ul li a:hover {
+    color: #7386D5;
+    background: #fff;
+}*/
+
+/*#sidebar ul li.active>a,
+a[aria-expanded="true"] {
+    color: #fff;
+    background: #6d7fcc;
+}*/
+
+a[data-toggle="collapse"] {
+    position: relative;
+}
+
+.dropdown-toggle::after {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+}
+
+ul ul a {
+    font-size: 0.9em !important;
+    padding-left: 30px !important;
+    background: #fff;
+}
+h1 {
+  background: rgba(61,77,101,.5)s no-repeat scroll 10px center;
+	color: #000;
+	font-size: 1.5em;
+	padding: 0.5em 50px;
+	margin:0;
+}
+h2 {
+  color: #337ab7;
+	font-size:1.1em;
+	margin: 0.5em 0;
+}
+
+.titulo{
+    font-size: 19px; 
+    font-weight: 500; 
+    color: #8e2919;
+}
+
+.search{
+    width: 225px;
+}
+
+#popup-content{
+    height: 350px;
+    overflow-y: auto;
+}
+
+
+/* ---------------------------------------------------
+    MEDIAQUERIES
+----------------------------------------------------- */
+
+@media (max-width: 768px) {
+    #sidebar {
+        margin-left: -250px;
+    }
+    #sidebar.active {
+        margin-left: 0;
+    }
+    #barra-lateral {
+        width: 100%;
+    }
+    #barra-lateral.active {
+        width: calc(100% - 250px);
+    }
+    #sidebarCollapse span {
+        display: none;
+    }
+
+}
+
+
+/*iphone 5*/
+@media (max-width: 321px) {
+    .titulo{
+        font-size: 12px; 
+        font-weight: 500; 
+        color: #8e2919;
+    }
+
+    #sidebar.active {
+        margin-right: -250px;
+    }
+
+    #sidebar_contenedor{
+        display: flex; 
+        width: 290px;
+    }
+
+    #sidebar_contenido{
+        /*background-color: #f0f0f0; 
+        border: #f0f0f0; 
+        border-style: groove; */
+        width: 250px;
+    }
+
+    .search{
+        width: 185px;
+    }
+
+    #popup-content{
+        height: 200px;
+        overflow-y: auto;
+    }
+
+}
+
+@media (min-width: 322px) and (max-width: 575px) {
+    .titulo{
+        font-size: 14px; 
+        font-weight: 500; 
+        color: #8e2919;
+    }
+
+    #sidebar.active {
+        margin-right: -300px;
+    }
+
+    #sidebar_contenedor{
+        display: flex; 
+        width: 340px;
+    }
+
+    #sidebar_contenido{
+        /*background-color: #f0f0f0; 
+        border: #f0f0f0; 
+        border-style: groove; */
+        width: 320px;
+    }
+
+    #popup-content{
+        height: 200px;
+        overflow-y: auto;
+    }
+
+   
+}
+
+/* Small devices (landscape phones, 576px and up)*/
+@media (min-width: 576px) and (max-width: 767px) {
+    
+}
+
+/* Medium devices (tablets, 768px and up)*/
+@media (min-width: 768px) and (max-width: 991px) {
+
+}
+
+/* Large devices (desktops, 992px and up)*/
+@media (min-width: 992px) and (max-width: 1199px) {
+
+}
+
+/* Extra large devices (large desktops, 1200px and up)*/
+@media (min-width: 1200px) {
+
+}
+
+
+
+
+/* login */
+
+.login-container{
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+.login-logo{
+    position: relative;
+    margin-left: -41.5%;
+}
+.login-logo img{
+    position: absolute;
+    width: 20%;
+    margin-top: 19%;
+    background: #282726;
+    border-radius: 4.5rem;
+    padding: 5%;
+}
+.login-form-1{
+    padding: 9%;
+    background:#DDD2B9;
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+}
+.login-form-1 h3{
+    text-align: center;
+    margin-bottom:6%;
+    color:#8e2919;
+}
+.login-form-2{
+    padding: 9%;
+    background: #f05837;
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+}
+.login-form-2 h3{
+    text-align: center;
+    margin-bottom:12%;
+    color: #fff;
+}
+.btnSubmit{
+    font-weight: 600;
+    width: 50%;
+    color: #8e2919;
+    background-color: #fff;
+    border: none;
+    border-radius: 1.5rem;
+    padding:2%;
+}
+.btnForgetPwd{
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+}
+.btnForgetPwd:hover{
+    text-decoration:none;
+    color:#fff;
+}

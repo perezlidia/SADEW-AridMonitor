@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <link rel="shortcut icon" type="image/png" href="/recursos/img/favicon.ico"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+  	<link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap.css" async="async">
+  	<link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap.min.css" async="async">
+    <link rel="stylesheet" href="/bower_components/bootstrap4-toggle/css/bootstrap4-toggle.min.css" type="text/css">
+  	<link rel="stylesheet" type="text/css" href="/bower_components/font-awesome/css/all.css" async="async">
+  	<link rel="stylesheet" href="/recursos/css/visor.css" type="text/css">
+    <link rel="stylesheet" href="/recursos/css/ol.css" type="text/css">
+    <link rel="stylesheet" href="/recursos/css/ol-ext.css" type="text/css">
+    <link rel="stylesheet" href="/recursos/css/jquery.mCustomScrollbar.min.css">
+    <script type="text/javascript" src="/recursos/js/ol.js"></script>
+    <script type="text/javascript" src="/recursos/js/ol-ext.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script type="text/javascript" src="/recursos/js/html2canvas.min.js"></script>
+    <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/bower_components/bootstrap4-toggle/js/bootstrap4-toggle.min.js"></script> 
+    <script type="text/javascript" src="/bower_components/proj4/dist/proj4.js"></script>
+    <script src="/recursos/js/jquery.mCustomScrollbar.concat.min.js"></script> 
+    <title>Visualizador Catastral de Culiacán</title>
+  	<style>   
+
+      a,
+      a:hover,
+      a:focus {
+          color: inherit;
+          text-decoration: none;
+          transition: all 0.3s;
+      }  
+
+  	  .ol-popup h1 {
+        font-size: 1em;
+        background-size: 2em;
+        padding-left: 3em;
+      }
+
+      .ol-popup {
+          position: absolute;
+          background-color: white;
+          box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+          padding: 10px;
+          border-radius: 10px;
+          border: 1px solid #cccccc;
+          bottom: 12px;
+          left: -50px;
+          min-width: 280px;
+        }
+        .ol-popup:after, .ol-popup:before {
+          top: 100%;
+          border: solid transparent;
+          content: " ";
+          height: 0;
+          width: 0;
+          position: absolute;
+          pointer-events: none;
+        }
+        .ol-popup:after {
+          border-top-color: white;
+          border-width: 10px;
+          left: 48px;
+          margin-left: -10px;
+        }
+        .ol-popup:before {
+          border-top-color: #cccccc;
+          border-width: 11px;
+          left: 48px;
+          margin-left: -11px;
+        }
+        .ol-popup-closer {
+          text-decoration: none;
+          position: absolute;
+          /*top: 0px;*/
+          right: 15px;
+          color: white;
+        }
+        .ol-popup-closer:after {
+          content: "✖";
+        }
+        #popup-closer:hover {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        #mCSB_1_container{
+          margin-right: 0px;
+        }
+
+        .selectedHerramienta{
+          background-color: gold !important;
+        }
+
+        .selectedHerramienta:hover {
+            color: #fff;
+            background-color: gold;
+        }
+
+
+        .ol-tooltip-static{
+          color: #FFF;
+          font-weight: 600;
+          background-color: #000;
+        }
+  	  
+      </style>
+  </head>
+  <body>
+    <div class="container-fluid p-0 m-0">
+
+      <!-- encabezado -->
+      <nav id="encabezado" class="navbar navbar-expand-lg fixed-top m-0 p-0" style="background-color: #f0f0f0; height: 70px">
+        <div class="container-fluid">
+          <!--<div class="row p-0 m-0 w-100">
+            <img src="/recursos/img/logo_mb.png" width="100" height="60" style="margin-right: 5px;"> 
+            <p class="titulo m-0 d-flex align-items-center">Visualizador Catastral de Culiacán</p>            
+          </div>  --> 
+          <div class="row p-0 m-0 w-100">
+            <div class="p-0 m-0 col-md-6 d-flex align-items-center" style="display: inline-flex;">
+              <img src="/recursos/img/logo_mb.png" width="100" height="60" style="margin-right: 5px;"> 
+              <p class="titulo m-0">Visualizador Catastral de Culiacán</p>                
+            </div>
+            <div class=" p-0 m-0 col-md-6 d-none d-md-block">
+              <div class="col-md-12">
+
+                <ul class="nav float-right">
+                  <li class="nav-item text-center" style="max-width: 100px;">
+                    <button id="btnTablaContenido" class="btn pr-0 pl-0 btn_menu" style="font-size: 14px;">
+                      <i class="fa fa-layer-group" style="font-size: 17px;"></i><br>
+                    Tabla de Contenido
+                  </button>
+                  </li>
+                  <li class="nav-item text-center" style="max-width: 100px;">
+                    <button id="btnConsultaPadron" class="btn pr-0 pl-0 btn_menu" style="font-size: 14px;">
+                      <i class="fa fa-file" style="font-size: 17px;"></i><br>
+                    Consulta a Padrón
+                  </button>
+                  </li>
+                  <li class="nav-item text-center" style="max-width: 100px;">
+                    <button id="btnInspeccionarPadron" class="btn pr-0 pl-0 btn_menu" style="font-size: 14px;">
+                      <i class="fas fa-user-check" style="font-size: 17px;"></i><br>
+                    Inspección y Graficación
+                  </button>
+                  </li>
+                </ul>
+    
+                
+              </div>
+              
+            </div>
+                   
+          </div> 
+        </div>
+      </nav>
+
+      <!-- menu lateral -->
+      <nav id="sidebar" style="background-color: #f0f0f0; border: #f0f0f0; border-style: groove;">       
+
+        <div id="sidebar_contenedor"> 
+            <div class="row m-0 p-0 h-100" style="width: 55px;">
+
+              <ul id="ulOpcionesMenu" class="p-0  m-0">
+                <button type="button" id="sidebarCollapse1" class="btn btn-info btn_menu" style="background-color: #f0f0f0; color: #000; width: 40px;">
+                 <i class="fa fa-bars" aria-hidden="true"></i>
+                </button>
+                <button id="btnTablaContenido" title="Tabla Contenido" type="button" class="btn btn-info btn_menu" style="background-color: #f0f0f0; color: #000; width: 40px;">
+                 <i class="fa fa-layer-group" aria-hidden="true"></i>
+                </button>
+                <button id="btnConsultaPadron" title="Consulta Padrón" type="button" class="btn btn-info btn_menu" style="background-color: #f0f0f0; color: #000; width: 40px;">
+                 <i class="fa fa-file" aria-hidden="true"></i>
+                </button>
+                <button id="btnInspeccionarPadron" title="Inspección y Graficación" type="button" class="btn btn-info btn_menu" style="background-color: #f0f0f0; color: #000; width: 40px;">
+                 <i class="fas fa-user-check" aria-hidden="true"></i>
+                </button>
+                <button id="btnUbicacion" type="button" class="btn btn-info btn_menu" style="background-color: #f0f0f0; color: #000;  width: 40px;">
+                 <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                </button>
+                <button id="btnStreetView" title="StreetView" type="button" class="btn btn-info btn_menu" style="background-color: #f0f0f0; color: #000;  width: 40px;">
+                 <i class="fas fa-street-view" aria-hidden="true"></i>
+                </button>
+                <button id="btnExportarPng" title="Exportar Mapa" type="button" class="btn btn-info btn_menu" style="background-color: #f0f0f0; color: #000;  width: 40px;">
+                 <i class="fas fa-camera" aria-hidden="true"></i>
+                </button>
+                <!--<button id="btnHerramientas" title="Herramientas" type="button" class="btn btn-info btn_menu" style="background-color: #f0f0f0; color: #000;  width: 40px;">
+                <i class="fas fa-tools" aria-hidden="true"></i>
+                </button>-->
+                <hr style="margin: 5px 0px 0px 0px; width: 40px; height: 5px;">
+              </ul>
+
+            </div>
+
+            <div id="sidebar_contenido" class="row">
+
+              <div id="seccion_tabla_contenido" class="w-100 sidebar_seccion"></div>
+
+              <div id="seccion_consulta_padron" class="w-100 sidebar_seccion" style="display: none;"></div>
+
+              <div id="seccion_inspeccionar_padron" class="w-100 sidebar_seccion" style="display: none;">
+                  <div class="container">
+                    <div id="inspeccionar_padron">
+                    </div>
+
+                    <div id="herramientas_padron">
+
+                      <div class="row m-0 pt-3 pb-2">
+                        <p class="m-0" style="font-weight: 500; color: rgb(0, 0, 0); font-size: 21px;">Graficación</p>
+                      </div>
+
+                      <div id="progressHerramientas" class="progress" style="display: none;">
+                        <div role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%; height: 8px;">  
+                        </div>
+                      </div>
+
+                      <div class="row m-0 pt-2">
+                        <p class="m-0" style="color: #000; font-weight: 400;">Dibujo</p>  
+                      </div>
+
+                      <div class="row m-0 pt-2">
+                        <button id="btnPunto" class="btn-sm btn-info btn_herramientas" title="Punto" style="font-size: 20px; padding: 0px; width: 40px; margin-right: 5px;">
+                          <i class="fas fa-circle"></i>
+                        </button>
+                        <button id="btnCirculo" class="btn-sm btn-info btn_herramientas" title="Circulo" style="font-size: 20px; padding: 0px; width: 40px; margin-right: 5px;">
+                          <i class="far fa-circle"></i>
+                        </button>
+                        <button id="btnLinea" class="btn-sm btn-info btn_herramientas" title="Linea" style="font-size: 20px; padding: 0px; width: 40px; margin-right: 5px;">
+                          <i class="fas fa-slash"></i>
+                        </button>
+                        <button id="btnPoligono" class="btn-sm btn-info btn_herramientas" title="Poligono" style="font-size: 20px; padding: 0px; width: 40px;">
+                          <i class="fas fa-draw-polygon"></i>
+                        </button>
+                      </div>
+
+                      <div class="row m-0 pt-2">
+                        <p class="m-0" style="color: #000; font-weight: 400;">Medida</p>  
+                      </div>
+
+                      <div class="row m-0 pt-2">
+                        <button id="btnLongitud" class="btn-sm btn-info btn_herramientas" title="Longitud" style="font-size: 20px; padding: 0px; width: 40px; margin-right: 5px;">
+                          <i class="fas fa-ruler-horizontal"></i>
+                        </button>
+                        <button id="btnArea" class="btn-sm btn-info btn_herramientas" title="Área" style="font-size: 20px; padding: 0px; width: 40px; margin-right: 5px;">
+                          <i class="fas fa-square"></i>
+                        </button>
+                      </div>
+
+                      <div class="row m-0 pt-2">
+                        <p class="m-0" style="color: #000; font-weight: 400;">Otras</p>  
+                      </div>
+
+                      <div class="row m-0 pt-2">
+
+                        <div class="form-check d-flex align-items-center">
+                          <input type="checkbox" class="form-check-input" style="width: 18px; height: 18px;" id="checkSnap">
+                          <label class="form-check-label" for="checkSnap" style="font-size: 16px; color: #000; margin-right: 5px;">Snap</label>
+                        </div>
+                        <button id="btnLimpiarCapaDibujo" class="btn-sm btn-info btn_herramientas" title="Limpiar Capa Dibujo" style="font-size: 20px; padding: 0px; width: 40px; margin-right: 5px;">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </div>
+
+                    </div>
+
+                  </div>
+              </div>
+
+              <div id="seccion_ubicacion" class="w-100 sidebar_seccion" style="display: none;"></div>
+
+              <div id="seccion_imprimir" class="w-100 sidebar_seccion" style="display: none;"></div>
+
+              <div id="seccion_busqueda" class="w-100 sidebar_seccion" style="display: none;"></div>
+
+              <div id="seccion_street_view" class="w-100 sidebar_seccion" style="display: none;">
+                  <div class="container">
+                    <div class="row m-0 pt-3 pb-2">
+                      <p class="m-0" style="font-weight: 500; color: rgb(0, 0, 0); font-size: 21px;">StreetView</p>
+                    </div>
+                    <div class="row m-0 pt-2 pb-2"><p class="m-0" style="font-weight: 400; color: rgb(0, 0, 0); font-size: 18px;">Seleccione una coordenada en el mapa para obtener información...</p>
+                    </div>
+                  </div>
+              </div>
+
+              <!--<div id="seccion_herramientas" class="w-100 sidebar_seccion" style="display: none;">
+                <div class="container">
+                    <div class="row m-0 pt-3 pb-2">
+                      <p class="m-0" style="font-weight: 500; color: rgb(0, 0, 0); font-size: 21px;">Herramientas</p>
+                    </div>
+
+                    <div id="progressHerramientas" class="progress" style="display: none;">
+                      <div role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%; height: 8px;">  
+                      </div>
+                    </div>
+
+                    <div class="row m-0 pt-2">
+                      <p class="m-0" style="color: #000; font-weight: 400;">Dibujo</p>  
+                    </div>
+
+                    <div class="row m-0 pt-2">
+                      <button id="btnPunto" class="btn-sm btn-info btn_herramientas" title="Punto" style="font-size: 20px; padding: 0px; width: 40px; margin-right: 5px;">
+                        <i class="fas fa-circle"></i>
+                      </button>
+                      <button id="btnCirculo" class="btn-sm btn-info btn_herramientas" title="Circulo" style="font-size: 20px; padding: 0px; width: 40px; margin-right: 5px;">
+                        <i class="far fa-circle"></i>
+                      </button>
+                      <button id="btnLinea" class="btn-sm btn-info btn_herramientas" title="Linea" style="font-size: 20px; padding: 0px; width: 40px; margin-right: 5px;">
+                        <i class="fas fa-slash"></i>
+                      </button>
+                      <button id="btnPoligono" class="btn-sm btn-info btn_herramientas" title="Poligono" style="font-size: 20px; padding: 0px; width: 40px;">
+                        <i class="fas fa-draw-polygon"></i>
+                      </button>
+                    </div>
+
+                    <div class="row m-0 pt-2">
+                      <p class="m-0" style="color: #000; font-weight: 400;">Medida</p>  
+                    </div>
+
+                    <div class="row m-0 pt-2">
+                      <button id="btnLongitud" class="btn-sm btn-info btn_herramientas" title="Longitud" style="font-size: 20px; padding: 0px; width: 40px; margin-right: 5px;">
+                        <i class="fas fa-ruler-horizontal"></i>
+                      </button>
+                      <button id="btnArea" class="btn-sm btn-info btn_herramientas" title="Área" style="font-size: 20px; padding: 0px; width: 40px; margin-right: 5px;">
+                        <i class="fas fa-square"></i>
+                      </button>
+                    </div>
+
+                    <div class="row m-0 pt-2">
+                      <p class="m-0" style="color: #000; font-weight: 400;">Otras</p>  
+                    </div>
+
+                    <div class="row m-0 pt-2">
+
+                      <div class="form-check d-flex align-items-center">
+                        <input type="checkbox" class="form-check-input" style="width: 18px; height: 18px;" id="checkSnap">
+                        <label class="form-check-label" for="checkSnap" style="font-size: 16px; color: #000; margin-right: 5px;">Snap</label>
+                      </div>
+                      <button id="btnLimpiarCapaDibujo" class="btn-sm btn-info btn_herramientas" title="Limpiar Capa Dibujo" style="font-size: 20px; padding: 0px; width: 40px; margin-right: 5px;">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                </div>
+              </div>-->
+
+            </div>
+        </div>
+
+      </nav>      
+
+      <!-- contenido de la pagina -->
+      <div id="contenido" class="fixed-top" style="top: 70px; right: 48px;">
+        <div id="mapa" class="p-0 m-0" style="width: 100%; height: 100%;"></div>
+        <a id="image-download" download="map.png"></a>
+
+        <div class="row" style="position: fixed; top: 80px; left: 60px;">
+          <button id="search" type="button" class="btn btn-info btn-sm" style="color: white; font-size: 14px;background-color: rgba(0,60,136,.5); padding: 0px; min-height: 34px; min-width: 34px;">
+            <i class="fa fa-search" aria-hidden="true"></i>
+          </button>
+          <select id="tipo_busqueda" style="display: none;">
+            <option value="0" selected>Seleccione</option>
+            <option value="1">Predio</option>
+            <option value="2">Manzana</option>
+            <option value="3">Propietario</option>
+            <option value="4">Cuartel</option>
+            <option value="5">Colonia</option>
+          </select>
+          <input type="search" class="search" autocomplete="off" placeholder="Buscar" style="display: none;">
+        </div>
+
+        <div id="popup" class="ol-popup" style="display: none;">
+          <div id="popup-header" class="container p-0 text-center" style="background-color: #3d4d65;">
+            <a style="color: white;">Identifica</a>
+            <a href="#" id="popup-closer" style="text-decoration: none; position: absolute; right: 15px; color: white;">
+              <i class="fas fa-times"></i>
+            </a>            
+          </div>          
+          <div id="popup-content"></div>
+        </div>
+      </div>  
+
+
+      <div id="scale-display" class="fixed-bottom" style="z-index: 9000; bottom: 25px;"></div>  
+
+      <!-- pie de pagina -->
+      <div id="footer" class="fixed-bottom d-flex align-items-center" style="height: 30px;z-index: 7000; background-color: #f0f0f0">
+          <div class="container-fluid p-0">
+            <div class="row m-0">
+              <div id="mouse-position" class="col-8 p-0" style="font-size: 11px; color: #8e2919;font-weight: 500;"></div>
+              <div class="col-4 text-right p-0" style="font-size: 11px; color: #8e2919;font-weight: 500;">  2020 ©️ Dirección de Catastro Municipal </div>
+            </div>
+          </div>
+      </div>     
+      
+    </div>
+    <script type="text/javascript" src="/recursos/js/visor.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $("#sidebar").mCustomScrollbar({
+            theme: "dark"
+        });
+
+        //asignar el alto al div contenido dependiendo del tamaño de la pantalla
+        $(window).on('resize', function(){
+          $('#contenido').css({ //son 60px del encabezado y 30px del footer 
+            height: ($(window).height() - 90) + 'px'
+          });
+          mapObject.updateSize();
+        });
+
+        $('#contenido').css({
+          height: ($(window).height() - 90) + 'px'
+        });
+        mapObject.updateSize();
+
+      });
+    </script>
+  </body>
+</html>
