@@ -3,58 +3,61 @@ SADEW is a geotechnical web platform to support spatial decision-making for the 
 
 ![img2](https://github.com/user-attachments/assets/3ab50ddb-0698-4976-b6ca-5b012610d7ed)
 
+To develop this project, [specialized software](https://github.com/perezlidia/SADEW-AridMonitor?tab=readme-ov-file#software-requirement) was necessary.
 
 # Software requirement
 
 Hardware required for full system installation: Windows PC; Software requirements: QGIS 2.8 or higher, Postgres10, Python 2., Python 3, Terrset, ArcGIS 9.3 or higher, Geoserver; Complements: Extension de Seleniun IDE, NodeJS,  PostGIS 2.5, ArcPy, PyQGIS, GDAL, Idrisi32, Apache, Geoserver-rest, Nodejs, Redis, JavaScript, Bower, Bootstrap
 
+
 QGIS:
-https://qgis.org/download/
+[Download](https://qgis.org/download/).
 
 Postgres10
-https://www.postgresql.org/download/
+[Download](https://www.postgresql.org/download/).
+
 
 Python 2
-https://www.python.org/downloads/release/python-272/
+[Download](https://www.python.org/downloads/release/python-272/).
 
 Python 3
-https://www.python.org/downloads/
+[Download](https://www.python.org/downloads/).
 
 Terrset
-https://clarklabs.org/download/
+[Download](https://clarklabs.org/download/).
 
 ArcGIS 9.3
-https://arcgis.software.informer.com/9.3/
+[Download](https://arcgis.software.informer.com/9.3/).
 
 Geoserver
-https://geoserver.org/download/
+[Download](https://geoserver.org/download/).
 
 Seleniun IDE
-https://chromewebstore.google.com/detail/selenium-ide/mooikfkahbdckldjjndioackbalphokd?hl=es
+[Download](https://chromewebstore.google.com/detail/selenium-ide/mooikfkahbdckldjjndioackbalphokd?hl=es).
 
 NodeJS
-https://nodejs.org/en/download/package-manager
+[Download](https://nodejs.org/en/download/package-manager).
 
 PostGIS 2.5
-https://postgis.net/2018/09/PostGIS-2.5.0/
-
+[Download](https://postgis.net/2018/09/PostGIS-2.5.0/).
 ArcPy
-https://pro.arcgis.com/es/pro-app/latest/arcpy/get-started/installing-arcpy.htm
+[Download](https://pro.arcgis.com/es/pro-app/latest/arcpy/get-started/installing-arcpy.htm).
 
 PyQGIS
-https://qgis.org/pyqgis/master/
+[Download](https://qgis.org/pyqgis/master/).
 
 GDAL
-https://gdal.org/en/latest/download.html
+[Download](https://gdal.org/en/latest/download.html).
 
 Idrisi32
-https://idrisi32.software.informer.com
+[Download](https://idrisi32.software.informer.com).
 
 Apache
-https://httpd.apache.org/download.cgi
+[Download](https://httpd.apache.org/download.cgi).
 
 Nodejs
-https://nodejs.org/en/download/package-manager
+[Download](https://nodejs.org/en/download/package-manager).
 
 Redis
-https://redis.io/downloads/
+[Download](https://redis.io/downloads/).
+
