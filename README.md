@@ -1,4 +1,7 @@
 # SADEW-AridMonitor
+> [!NOTE]
+> SADEW (for its acronym in Spanish: Sistema de Apoyo a la toma de Decisiones Espacial Web).
+
 SADEW is a geotechnical web platform to support spatial decision-making for the monitoring of arid zones in Northwest Mexico, which can show the retrospective, actual, and prospective behavior of these regions, applying a series of computational tools and data integration methods, which can be scalable at regional, national and global levels.
 
 >To develop this project, [specialized software](https://github.com/perezlidia/SADEW-AridMonitor?tab=readme-ov-file#software-requirement) was necessary.
@@ -10,6 +13,7 @@ SADEW is a geotechnical web platform to support spatial decision-making for the 
 Within the options, we can analyze the mapping from different variable perspectives, which will give us access to interesting data.
 
 ![img4](https://github.com/user-attachments/assets/2b52c1f3-dce6-486c-8b6b-64325818cab3)
+
 
 
 # Software requirement
