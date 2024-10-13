@@ -10,16 +10,16 @@ class Config {
 		    max: 25, // max number of clients in the pool
 		    host     : '127.0.0.1',
 		    port     : '5432',
-		    user     : 'postgres', 
-		    password : 'postgres', 
+		    user     : 'sadew', 
+		    password : '********', 
 		    database : 'zonas_aridas'
 		}
 	}
 	static getPathProyect(){
-		return 'file:///D:/zonas_aridas/zonas_aridas_web/';
+		return 'file:////zonas_aridas/zonas_aridas_web/';
 	}
 	static getPathProyectPython(){
-		return 'D:/zonas_aridas/zonas-aridas/';
+		return '/zonas_aridas/zonas_aridas_processing/';
 	}
 }	
 
