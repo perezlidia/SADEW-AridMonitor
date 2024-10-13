@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <link rel="shortcut icon" type="image/png" href="/recursos/img/favicon.ico"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap.css" async="async">
+    <link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap.min.css" async="async">
+    <link rel="stylesheet" href="/recursos/css/visor.css" type="text/css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <title>Acceso a SADEW</title>
+  </head>
+  <body>
+    <div id="contenidoPagina" class="container-fluid p-0 m-0">
+
+      <div class="container login-container">
+        <form role="form" action="/check" method="post">
+          <div class="row d-flex justify-content-center">
+            <div class="col-md-6 login-form-1 text-center" style="padding: 5% 9%;">
+                <img src="/recursos/img/logo_mb.png" style="margin-bottom:2%; width: 420px;"> <br><br><br>
+                <h5 style="color:#8e2919; margin-bottom:6%;">Sistema de Apoyo a la Toma de Decisiones Espacial Web</h5>                
+                <div class="form-group">
+                    <input id="correo" name="correo" type="text" class="form-control" placeholder="Email *" value="" />
+                </div>
+                <div class="form-group">
+                    <input id="pass" name="pass" type="password" class="form-control" placeholder="Contraseña *" value="" />
+                </div>
+                <div class="form-group">
+                    <input id="btnLogin" type="submit" class="btnSubmit" value="Entrar" />
+                </div>
+                <!--<div class="form-group">
+                    <a href="#" class="btnForgetPwd">Forget Password?</a>
+                </div>-->      
+            </div>
+          </div>
+        </form> 
+      </div> 
+    </div>
+  </body>
+</html>
+<script type="text/javascript">
+  $(document).ready(function () {
+    setTimeout(function () {
+      <% if(error !== ''){%>
+        alert('<%= error %>');
+      <% }%>
+    }, 500);
+  });
+</script>
+
+
+

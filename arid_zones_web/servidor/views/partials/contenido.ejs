@@ -1,0 +1,25 @@
+<div id="contenido" class="fixed-top" style="top: 70px; right: 48px;">
+        <div id="mapa" class="p-0 m-0" style="width: 100%; height: 100%;"></div>
+        <a id="image-download" download="map.jpg"></a>
+
+        <div class="row" style="position: fixed; top: 80px; left: 60px;">
+          <button id="search" type="button" class="btn btn-info btn-sm" style="color: white; font-size: 14px;background-color: rgba(0,60,136,.5); padding: 0px; min-height: 34px; min-width: 34px;">
+            <i class="fa fa-search" aria-hidden="true"></i>
+          </button>
+          <select id="tipo_busqueda" style="display: none;">
+            <option value="0" selected>Seleccione</option>
+            <option value="1">Año</option>
+          </select>
+          <input type="search" class="search" autocomplete="off" placeholder="Buscar" style="display: none;">
+        </div>
+
+        <div id="popup" class="ol-popup" style="display: none;">
+          <div id="popup-header" class="container p-0 text-center" style="background-color: #3d4d65;">
+            <a style="color: white;">Identifica</a>
+            <a href="#" id="popup-closer" style="text-decoration: none; position: absolute; right: 15px; color: white;">
+              <i class="fas fa-times"></i>
+            </a>            
+          </div>          
+          <div id="popup-content"></div>
+        </div>
+      </div>  

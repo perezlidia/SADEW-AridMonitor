@@ -1,0 +1,2335 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <link rel="shortcut icon" type="image/png" href="/recursos/img/favicon.ico"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap.css" async="async">
+    <link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap.min.css" async="async">
+    <link rel="stylesheet" href="/bower_components/bootstrap4-toggle/css/bootstrap4-toggle.min.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="/bower_components/font-awesome/css/all.css" async="async">
+    <link rel="stylesheet" href="/recursos/css/visor.css" type="text/css">
+    <link rel="stylesheet" href="/recursos/css/ol.css" type="text/css">
+    <link rel="stylesheet" href="/recursos/css/ol-ext.css" type="text/css">
+    <link rel="stylesheet" href="/recursos/css/jquery.mCustomScrollbar.min.css">
+    <script type="text/javascript" src="/recursos/js/ol.js"></script>
+    <script type="text/javascript" src="/recursos/js/ol-ext.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script type="text/javascript" src="/recursos/js/html2canvas.min.js"></script>
+    <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/bower_components/bootstrap4-toggle/js/bootstrap4-toggle.min.js"></script> 
+    <script type="text/javascript" src="/bower_components/proj4/dist/proj4.js"></script>
+    <script src="/recursos/js/jquery.mCustomScrollbar.concat.min.js"></script> 
+    <title>SADEW</title>
+    <style>   
+
+      a,
+      a:hover {
+          color: inherit;
+          text-decoration: none;
+          transition: all 0.3s;
+      }  
+
+      .ol-popup h1 {
+        font-size: 1em;
+        background-size: 2em;
+        padding-left: 3em;
+      }
+
+      .ol-popup {
+          position: absolute;
+          background-color: white;
+          box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+          padding: 10px;
+          border-radius: 10px;
+          border: 1px solid #cccccc;
+          bottom: 12px;
+          left: -50px;
+          min-width: 280px;
+        }
+        .ol-popup:after, .ol-popup:before {
+          top: 100%;
+          border: solid transparent;
+          content: " ";
+          height: 0;
+          width: 0;
+          position: absolute;
+          pointer-events: none;
+        }
+        .ol-popup:after {
+          border-top-color: white;
+          border-width: 10px;
+          left: 48px;
+          margin-left: -10px;
+        }
+        .ol-popup:before {
+          border-top-color: #cccccc;
+          border-width: 11px;
+          left: 48px;
+          margin-left: -11px;
+        }
+        .ol-popup-closer {
+          text-decoration: none;
+          position: absolute;
+          /*top: 0px;*/
+          right: 15px;
+          color: white;
+        }
+        .ol-popup-closer:after {
+          content: "✖";
+        }
+        #popup-closer:hover {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        #mCSB_1_container{
+          margin-right: 0px;
+        }
+
+        .ol-tooltip-static{
+          color: #FFF;
+          font-weight: 600;
+          background-color: #000;
+        }
+      
+      </style>
+  </head>
+  <body>
+    <div id="contenidoPagina" class="container-fluid p-0 m-0">
+
+      <!-- encabezado -->
+      <%- include('partials/encabezado') %> 
+
+      <!-- menu lateral -->
+      <%- include('partials/sidebar') %> 
+
+      <!-- contenido de la pagina -->
+      <%- include('partials/contenido') %> 
+
+
+      <div id="scale-display" class="fixed-bottom" style="z-index: 9000; bottom: 25px;"></div>  
+
+      <!-- pie de pagina -->
+      <%- include('partials/footer') %> 
+    </div>
+
+    <!-- script global -->
+    <script type="text/javascript">
+
+      const proj_32613 = 'EPSG:32613';
+      const resolutionMap = 150;
+      const dimMap = [210, 148];
+      var arregloBusquedas = [];
+      var positionTexto = null;
+
+      var attribution = new ol.control.Attribution({
+          collapsible: true,
+        });
+
+      proj4.defs(proj_32613, '+proj=utm +zone=13 +datum=WGS84 +units=m +no_defs');
+      ol.proj.proj4.register(proj4);
+
+      //layer para mostrar la ubicacion del usuario
+      var accuracyFeature = new ol.Feature();
+      var positionFeature = new ol.Feature();
+      positionFeature.setStyle(
+        new ol.style.Style({
+          image: new ol.style.Circle({
+            radius: 6,
+            fill: new ol.style.Fill({
+              color: '#3399CC',
+            }),
+            stroke: new ol.style.Stroke({
+              color: '#fff',
+              width: 2,
+            }),
+          }),
+        })
+      );
+      var vectorPosition = new ol.layer.Vector({
+        source: new ol.source.Vector({
+          features: [ 
+            positionFeature, accuracyFeature
+          ],
+        }),
+      });
+
+      //layer para mostrar las busquedas
+      var sourceBusquedas = new ol.source.Vector();
+      //Vector Layer
+      var vectorBusquedas = new ol.layer.Vector({
+        source: sourceBusquedas,
+        style: new ol.style.Style({
+            fill: new ol.style.Fill({
+                color: 'rgba(153, 135, 18, .3)'
+            }),
+            stroke: new ol.style.Stroke({
+                color: 'orange',
+                width: 2
+            })
+        })
+      });
+        
+      //capa seleccionada por 15 segundos
+      const timeOut = 15000;
+      var sourceSeleccion = new ol.source.Vector();
+      //Vector Layer
+      var vectorSeleccion = new ol.layer.Vector({
+        source: sourceSeleccion,
+        style: new ol.style.Style({
+            fill: new ol.style.Fill({
+                color: 'rgba(255, 255, 255, 0)'
+            }),
+            stroke: new ol.style.Stroke({
+                color: 'black',
+                width: 2
+            })
+        })
+      });
+        
+      var mapObject = null;
+      var coordenadasCenterMapa = [257927.5481, 3044915.3498];
+      var zoomMapa = 6;
+
+      //ubicacion del usuario
+      var geolocation = new ol.Geolocation({
+        trackingOptions: {
+          enableHighAccuracy: true,
+        },
+        projection: proj_32613,
+      });
+
+      //popup click map.
+      var container = document.getElementById('popup');
+      var overlayPopUp = new ol.Overlay({
+        element: container,
+        autoPan: true,
+        autoPanAnimation: {
+          duration: 250,
+        },
+      });
+      var contentPopup = null;
+      var closer = null;
+
+      //window.history.pushState(null, "", "visor");
+      $(document).ready(function () {
+        
+        var listPromise3 = [];
+
+        var promise = new Promise(function(resolve, reject) {
+
+          jQuery.ajax({
+            type:'GET',
+            cache:false,
+            error:function(error){
+                reject('error al consultar la tabla de contenidos');
+            },
+            url: window.location.origin + window.location.pathname + '/' + "tablaContenido",
+            success:function(result){
+                if (result.code == 200) {                       
+                    resolve(result.data);console.log(result.data)
+                }else{
+                    reject(result.menssage);
+                }
+            }
+          });                   
+            
+        });
+        listPromise3.push(promise);
+
+        Promise.all(listPromise3).then(function(response){
+          $("#sidebar").mCustomScrollbar({
+              theme: "dark"
+          });
+          
+          //evento click para los butones del menu lateral
+          $('button.btn_menu').on('click', funcionButtonMenuClick);
+
+
+          //busquedas
+          $('button#search').on('click', function () {
+            if ($('.search').is(':visible')) {
+              $('.search').hide();
+              $('#tipo_busqueda').hide();
+              
+            } else {
+                $('.search').show();      
+                $('#tipo_busqueda').show();
+                $('.search').focus();
+            }
+          });
+
+          $('.search').on('keyup', function (e) {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+
+              if ($('#tipo_busqueda').val() > 0) {
+
+                if ($('.search').val().length > 0) {
+
+                  var listPromise2 = [];
+
+                  var promise = new Promise(function(resolve, reject) {
+
+                    jQuery.ajax({
+                      type:'GET',
+                      data: { buscar : $('.search').val(), tipo_busqueda: $('#tipo_busqueda').val()},
+                      cache:false,
+                      error:function(error){
+                          reject('error al consultar busqueda');
+                      },
+                      url: window.location.origin + window.location.pathname + '/' + "busquedas",
+                      success:function(result){
+                          if (result.code == 200) {                       
+                              resolve(result.data);
+                          }else{
+                              reject(result.menssage);
+                          }
+                      }
+                    });                   
+                      
+                  });
+                  listPromise2.push(promise);
+
+                  Promise.all(listPromise2).then(function(response){
+
+                    if (!arregloBusquedas[response[0].searchTerm]) {
+                      //no existe
+
+                      arregloBusquedas[response[0].searchTerm] = response[0];
+
+                      var oButton5  = document.createElement('button'); 
+                      oButton5.setAttribute("id", 'btnSearch');
+                      oButton5.setAttribute("type", 'button');
+                      oButton5.setAttribute("name", arregloBusquedas[response[0].searchTerm].searchTerm);
+                      oButton5.setAttribute("title", arregloBusquedas[response[0].searchTerm].searchTerm);
+                      oButton5.classList = "btn btn-info btn_menu";
+                      oButton5.style.backgroundColor = '#f0f0f0';
+                      oButton5.style.color = '#000';
+                      oButton5.style.width = '40px';
+                      oButton5.addEventListener("click", funcionButtonMenuClick);
+
+                      var oI2  = document.createElement('i'); 
+                      oI2.classList = "fas fa-search";
+                      oI2.setAttribute("aria-hidden", 'true');
+                      oButton5.appendChild(oI2);
+
+                      $('#ulOpcionesMenu').append(oButton5);
+
+                      generarHtmlBusqueda(arregloBusquedas[response[0].searchTerm].searchTerm);
+
+                    }else{
+                      generarHtmlBusqueda(arregloBusquedas[response[0].searchTerm].searchTerm);
+                    }
+
+                    $('.search').val('');
+                    $('.search').hide();
+                    $('#tipo_busqueda').hide();
+
+                  }).catch(function(e){ 
+                    console.info(e);
+                  }); 
+                }else{
+                  alert("Proporcione el dato a buscar");
+                }
+
+              }else{
+                alert("Seleccione el tipo de busqueda");
+              }
+
+            }  
+          });
+          
+          inicializarMapaOpenLayer(response[0]);
+
+          //asignar el alto al div contenido dependiendo del tamaño de la pantalla
+          $(window).on('resize', function(){
+            $('#contenido').css({ //son 60px del encabezado y 30px del footer 
+              height: ($(window).height() - 90) + 'px'
+            });
+            mapObject.updateSize();
+          });
+
+          $('#contenido').css({
+            height: ($(window).height() - 90) + 'px'
+          });
+          mapObject.updateSize(); 
+
+          contentPopup = document.getElementById('popup-content');+
+          $('#popup').show();
+          closer = document.getElementById('popup-closer');
+          closer.onclick = function () {
+            overlayPopUp.setPosition(undefined);
+            closer.blur();
+            return false;
+          };
+         
+          
+        }).catch(function(e){ 
+          console.info(e);
+        }); 
+
+      });     
+
+      //streetView
+      function streetview(evt){ //24.785715, -107.392296
+        var coords = ol.proj.transform(evt.coordinate, proj_32613, 'EPSG:4326');
+        const url = "http://maps.google.com/?cbll="+coords[1]+","+coords[0]+"&cbp=12,90,0,0,5&layer=c";            
+        window.open(url,'popup','width=800,height=600,scrollbars=no,resizable=no');
+      }
+
+      //funcion para obtener una capa por su propiedad name
+      function obtenerLayerAtName(name){
+        var mapLayers = mapObject.getLayers().getArray();
+        var layer = null;
+        mapLayers.forEach(function (layerItem, i) {
+           if (layerItem.getProperties().name === name) {
+              layer = layerItem;
+           }
+        });
+        return layer;
+
+      }
+
+      function imprimirPdf(url, name, params){
+
+        var form = document.createElement("form");
+        form.setAttribute("method", "POST");
+        form.setAttribute("action", url);
+        form.setAttribute("target", name);
+
+
+        for (var i in params) {
+          if (params.hasOwnProperty(i)) {
+              var input = document.createElement('input');
+              input.type = 'hidden';
+              input.name = i;
+              input.value = params[i];
+              form.appendChild(input);
+          }
+        }
+
+        document.body.appendChild(form);
+        window.open("", name, "_blank");  
+        form.submit();        
+        document.body.removeChild(form); 
+
+      }
+
+      function exportarMapaPng(){
+        //Crear la captura del mapa
+        mapObject.once('rendercomplete', function () {
+
+          html2canvas(document.querySelector('#mapa')).then(canvas => {
+            if (navigator.msSaveBlob) {
+              // link download attribuute does not work on MS browsers
+              navigator.msSaveBlob(canvas.msToBlob(), 'map.jpg');
+            } else {
+              var link = document.getElementById('image-download');
+              link.href = canvas.toDataURL('image/jpeg');
+              link.click();
+            }
+
+          });
+
+        });
+        mapObject.renderSync();         
+      }
+
+      function exportarPDF(p1, p2, prYear){
+        mapObject.once('rendercomplete', function () {
+
+          html2canvas(document.querySelector('#mapa')).then(canvas => {            
+            var img = canvas.toDataURL('image/png');
+            var url = window.location.origin + window.location.pathname + '/' + p1;  
+            console.log(url)  
+            var name = p2;
+            var param = { 'mapa': img, 'year': prYear};
+
+            imprimirPdf(url, name, param);      
+
+          });
+        });
+        mapObject.renderSync();         
+
+      }
+
+      function uuidv4() {
+        var result = '';
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < 6; i++ ) {
+          result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+      }
+    </script>
+
+    <!-- script encabezado y sidebar -->
+    <script type="text/javascript">  
+      function irTablaContenido(){
+        //mostrar tabla de contenido
+        positionTexto = null;
+        $('#frmTexto').hide();
+        sourceBusquedas.clear();
+        if ($('#sidebar')[0].classList.contains('active')) {
+            $("#sidebar").removeClass("active");
+        }
+        $('.sidebar_seccion').hide();
+        $('#seccion_tabla_contenido').show(); 
+
+      }    
+      
+      var funcionButtonMenuClick = function () {
+        switch($(this).attr('id')){
+            case 'sidebarCollapse1':
+              if ($('#sidebar')[0].classList.contains('active')) {
+                 $("#sidebar").removeClass("active");
+              }else{
+                $("#sidebar").addClass("active");
+              }
+              break;
+
+            case 'btnTablaContenido':
+              irTablaContenido()     
+              break;
+
+            case 'btnMapaTendencial':
+              sourceBusquedas.clear();
+              if ($('#sidebar')[0].classList.contains('active')) {
+                 $("#sidebar").removeClass("active");
+              }
+              $('.sidebar_seccion').hide();
+              $('#seccion_mapa_tendencial').show();
+              break;
+
+            case 'btnInspeccionarPadron':
+              sourceBusquedas.clear();
+              if ($('#sidebar')[0].classList.contains('active')) {
+                 $("#sidebar").removeClass("active");
+              }
+              $('.sidebar_seccion').hide();
+              generarHtmlInspeccionarPadron(datoInspeccionarPadron);
+              $('#seccion_inspeccionar_padron').show();
+
+              break;
+
+            case 'btnSearch':
+              positionTexto = null;
+              $('#frmTexto').hide();
+              sourceBusquedas.clear();
+              if ($('#sidebar')[0].classList.contains('active')) {
+                 $("#sidebar").removeClass("active");
+              }
+              generarHtmlBusqueda($(this).attr('name'));
+              break;
+
+            case 'btnCerrarBusqueda':
+              sourceBusquedas.clear();              
+              borrarBusqueda($(this).attr('name'))
+              /*if (arregloBusquedas[$(this).attr('name')]) {
+                delete arregloBusquedas[$(this).attr('name')];
+
+                if ($("button#btnSearch[name='"+$(this).attr('name')+"']").length > 0) {
+                  $("button#btnSearch[name='"+$(this).attr('name')+"']")[0].remove();
+                  $('#seccion_busqueda')[0].innerHTML = '';
+
+                  $('.sidebar_seccion').hide();
+                  $('#seccion_tabla_contenido').show(); 
+                }
+              }*/
+              break;
+          
+            case 'btnStreetView':
+              positionTexto = null;
+              $('#frmTexto').hide();
+              sourceBusquedas.clear();
+              if ($('#sidebar')[0].classList.contains('active')) {
+                 $("#sidebar").removeClass("active");
+              }
+              $('.sidebar_seccion').hide();
+              $('#seccion_street_view').show();
+              break;
+            
+            case 'btnExportarPng':
+              exportarMapaPng();
+              break;
+
+            case 'btnUbicacion':
+              positionTexto = null;
+              $('#frmTexto').hide();            
+              sourceBusquedas.clear();
+              if ($('#sidebar')[0].classList.contains('active')) {
+                 $("#sidebar").removeClass("active");
+              }
+              $('.sidebar_seccion').hide();
+              $('#seccion_ubicacion').show();
+              break;  
+            default:
+              break;
+         }        
+      }
+
+      $('#btnTendenciaProcesar').on('click', function(){
+        //txtAnoTendencia
+
+        if($('#txtAnoTendencia').val().length > 0){
+          yearProcesar = $('#txtAnoTendencia').val() 
+          elemento = $(this)       
+          elemento.prop('disabled', true);
+
+          jQuery.ajax({
+            type:'POST',
+            data: { year : yearProcesar},
+            cache:false,
+            timeout: 0, 
+            error:function(error){
+                console.log(error)
+                alert(error)
+                elemento.prop('disabled', false);
+                //reject('error al procesar el año ' + yearProcesar);
+            },
+            url: window.location.origin + window.location.pathname + '/' + "iniciarMapaTendencial",
+            success:function(result){
+                if (result.code == 200) {                        
+                    alert(result.data)
+                    elemento.prop('disabled', false);
+                }else{
+                    //reject(result.menssage);
+                    alert(result.menssage)
+                    console.log(result.menssage)
+                    elemento.prop('disabled', false);
+                }
+            }
+          }); 
+        }else{
+          alert("Ingrese el año que desee procesar.")
+        }
+        
+          
+      });
+
+      function AbrirMenu(){
+        if ($('#sidebar')[0].classList.contains('active')) {
+           $("#sidebar").removeClass("active");
+        }
+      }
+    </script>
+
+    <!-- script para las busquedas -->
+    <script type="text/javascript">
+      function generarHtmlBusqueda(busqueda){
+
+        if (arregloBusquedas[busqueda]) {
+          $('#seccion_busqueda').empty();
+
+          var oDiv1  = document.createElement('div');  
+          oDiv1.classList = "row";
+          oDiv1.style.margin = "10px";
+
+          var oP1  = document.createElement('p'); 
+          oP1.classList = "m-0";
+          oP1.style.fontWeight = 500;
+          oP1.style.color = 'rgba(0,0,0)';
+          oP1.style.fontSize = '21px';
+          oP1.style.padding = '10px';
+          oP1.innerHTML= 'Resultados de la Búsqueda';
+          oDiv1.appendChild(oP1);
+
+
+          var oDiv2  = document.createElement('div');  
+          oDiv2.classList = "row";
+          oDiv2.style.margin = "10px";
+          oDiv2.style.backgroundColor = '#DDD4C6';
+
+          var oP2  = document.createElement('p'); 
+          oP2.classList = "m-0";
+          oP2.style.fontWeight = 400;
+          oP2.style.color = 'rgba(0,0,0)';
+          oP2.style.fontSize = '16px';
+          oP2.style.padding = '10px';
+          oP2.innerHTML= 'Resultados: ' + arregloBusquedas[busqueda].total;
+          oDiv2.appendChild(oP2);
+
+          var oUlPrincipal  = document.createElement('ul');  
+          oUlPrincipal.classList = "list-unstyled components w-100";
+          oUlPrincipal.style.margin = "10px";
+
+          if (arregloBusquedas[busqueda].data !== null && arregloBusquedas[busqueda].data.length > 0 ) {         
+            var oLi1  = document.createElement('li');  
+            //oLi1.setAttribute("id", busqueda + '|' + 0);
+            oLi1.classList = 'mb-1';
+            oLi1.style.paddingLeft = "10px";
+            oLi1.style.paddingRight = "10px";
+            oLi1.style.backgroundColor = "#DDD4C6";
+            oLi1.style.cursor = "pointer";
+
+            var oDiv3  = document.createElement('div');  
+            oDiv3.classList = "row m-0 p-0";
+
+            var oSpan1  = document.createElement('span'); 
+            oSpan1.style.color = "black";
+            oSpan1.style.fontSize = "12px";
+            oSpan1.innerHTML= arregloBusquedas[busqueda].type;
+
+            oDiv3.appendChild(oSpan1);
+            
+            var oDiv4  = document.createElement('div');  
+            oDiv4.classList = "row m-0 p-0";
+            oDiv4.style.backgroundColor = "#DDD4C6";
+
+            var dato = 'Cve. ' + arregloBusquedas[busqueda].data[0].visualizar;
+              
+            var oP5  = document.createElement('p'); 
+            oP5.classList = "m-0 p-0";
+            oP5.style.fontWeight = 400;
+            oP5.style.color = 'rgba(0,0,0)';
+            oP5.style.fontSize = '16px';
+            oP5.innerHTML= dato;
+            oDiv4.appendChild(oP5); 
+
+            var oDiv5  = document.createElement('div');  
+            oDiv5.classList = "row m-0 p-0";
+            
+            var oButton2  = document.createElement('button'); 
+            //oButton2.setAttribute("id", 'btnCerrarBusqueda');            
+            oButton2.setAttribute("id", busqueda + '|' + arregloBusquedas[busqueda].searchTerm);
+            oButton2.setAttribute("type", 'button');
+            oButton2.setAttribute("name", arregloBusquedas[busqueda].searchTerm);
+            oButton2.classList = "btn btn-info btn_menu";
+            oButton2.style.backgroundColor = '#f0f0f0';
+            oButton2.style.color = '#000';
+            oButton2.style.marginLeft = '10px';
+            oButton2.style.marginTop = '10px';
+            oButton2.style.marginBottom = '10px';
+            oButton2.innerHTML= 'Ir a Tabla de Contenido';
+            oButton2.addEventListener("click", funcionResultadoBusquedaClick);            
+            oDiv5.appendChild(oButton2); 
+
+            oLi1.appendChild(oDiv3);
+            oLi1.appendChild(oDiv4);
+            oLi1.appendChild(oDiv5);
+            //oLi1.addEventListener("click", funcionResultadoBusquedaClick);
+            oUlPrincipal.appendChild(oLi1);          
+
+          }else{
+
+            var oLi1  = document.createElement('li');  
+            //oLi1.setAttribute("id", busqueda + '|' + 0);
+            oLi1.classList = 'mb-1';
+            oLi1.style.paddingLeft = "10px";
+            oLi1.style.paddingRight = "10px";
+            oLi1.style.backgroundColor = "#DDD4C6";
+            oLi1.style.cursor = "pointer";
+
+            var oDiv3  = document.createElement('div');  
+            oDiv3.classList = "row m-0 p-0";
+
+            var oSpan1  = document.createElement('span'); 
+            oSpan1.style.color = "black";
+            oSpan1.style.fontSize = "15px";
+            oSpan1.innerHTML= "El año " + arregloBusquedas[busqueda].searchTerm + " no se encuentra almacenado";
+
+            oDiv3.appendChild(oSpan1);
+
+
+            var oDiv9  = document.createElement('div');  
+            oDiv9.classList = "row m-0 p-0";
+
+            var oSpan9  = document.createElement('span'); 
+            oSpan9.style.color = "black";
+            oSpan9.style.fontSize = "15px";
+            oSpan9.style.marginTop = "10px";
+            oSpan9.innerHTML= "Nota: <br> Si inicia la acción está puede durar varias horas en completarse.<br> Recomendamos que despues de varias horas inicie session nuevamente para ver el mapa en la tabla de contenidos.";
+
+            oDiv9.appendChild(oSpan9);
+
+            var oDiv5  = document.createElement('div');  
+            oDiv5.classList = "row m-0 p-0";
+            
+            var oButton2  = document.createElement('button');           
+            oButton2.setAttribute("id", busqueda + '|' + arregloBusquedas[busqueda].searchTerm);
+            oButton2.setAttribute("type", 'button');
+            oButton2.setAttribute("name", arregloBusquedas[busqueda].searchTerm);
+            oButton2.classList = "btn btn-info btn_menu";
+            oButton2.style.backgroundColor = '#f0f0f0';
+            oButton2.style.color = '#000';
+            oButton2.style.marginTop = '10px';
+            oButton2.style.marginBottom = '10px';
+            oButton2.innerHTML= 'Iniciar Procesamiento';
+            oButton2.addEventListener("click", funcionInicarProcesamientoClick);            
+            oDiv5.appendChild(oButton2); 
+
+            oLi1.appendChild(oDiv3);
+            oLi1.appendChild(oDiv9);
+            oLi1.appendChild(oDiv5);
+            oUlPrincipal.appendChild(oLi1);  
+          }
+
+          
+          var oButton1  = document.createElement('button'); 
+          oButton1.setAttribute("id", 'btnCerrarBusqueda');
+          oButton1.setAttribute("type", 'button');
+          oButton1.setAttribute("name", arregloBusquedas[busqueda].searchTerm);
+          oButton1.classList = "btn btn-info btn_menu";
+          oButton1.style.backgroundColor = '#f0f0f0';
+          oButton1.style.color = '#000';
+          oButton1.style.marginLeft = '10px';
+          oButton1.style.marginTop = '10px';
+          oButton1.style.marginBottom = '10px';
+          oButton1.innerHTML= 'Cerrar';
+          oButton1.addEventListener("click", funcionButtonMenuClick);
+
+
+          $('#seccion_busqueda').append(oDiv1);
+          $('#seccion_busqueda').append(oDiv2);
+          $('#seccion_busqueda').append(oUlPrincipal);
+          $('#seccion_busqueda').append(oButton1);
+
+          AbrirMenu();
+          $('.sidebar_seccion').hide();
+          $('#seccion_busqueda').show();
+
+        }
+      }
+
+      function borrarBusqueda(item){
+        if (arregloBusquedas[item]) {
+          delete arregloBusquedas[item];
+
+          if ($("button#btnSearch[name='"+item+"']").length > 0) {
+            $("button#btnSearch[name='"+item+"']")[0].remove();
+            $('#seccion_busqueda')[0].innerHTML = '';
+
+            $('.sidebar_seccion').hide();
+            $('#seccion_tabla_contenido').show(); 
+          }
+        }
+      }
+      var funcionResultadoBusquedaClick = function () {
+        irTablaContenido()
+        year = $(this).attr('name')
+        $('.collapse').collapse("hide")
+
+        setTimeout(function() {          
+          $('#pageSubMenu'+ year).collapse("show")
+        }, 100);
+        
+      }
+            
+      var funcionInicarProcesamientoClick = function (){        
+        yearProcesar = $(this).attr('name') 
+        elemento = $(this)       
+        elemento.prop('disabled', true);
+        
+        var listPromise3 = [];
+
+        //var promise = new Promise(function(resolve, reject) {
+
+          jQuery.ajax({
+            type:'POST',
+            data: { year : yearProcesar},
+            cache:false,
+            timeout: 0, 
+            error:function(error){
+                console.log(error)
+                alert(error)
+                elemento.prop('disabled', false);
+                //reject('error al procesar el año ' + yearProcesar);
+            },
+            url: window.location.origin + window.location.pathname + '/' + "iniciarProcesamiento",
+            success:function(result){
+                if (result.code == 200) {                       
+                    //resolve(result.data);
+                    /*if(result.data.status != undefined){
+                      actualizarTablaContenido()
+
+                      setTimeout(function() {  
+                        irTablaContenido()
+                        year = result.data.year
+                        $('.collapse').collapse("hide")        
+                        $('#pageSubMenu'+ year).collapse("show")
+
+                        //borrarBusqueda(year)
+                      }, 100);
+
+                    }else{            
+                      alert(result.data)
+                      console.log(result.data)
+                    }*/
+                    
+                    alert(result.data)
+                    elemento.prop('disabled', false);
+                }else{
+                    //reject(result.menssage);
+                    alert(result.menssage)
+                    console.log(result.menssage)
+                    elemento.prop('disabled', false);
+                }
+            }
+          });                   
+            
+        //});
+        //listPromise3.push(promise);
+
+        /*Promise.all(listPromise3).then(function(response){
+          if(response[0].status != undefined){
+            actualizarTablaContenido()
+
+            setTimeout(function() {  
+              irTablaContenido()
+              year = response[0].year
+              $('.collapse').collapse("hide")        
+              $('#pageSubMenu'+ year).collapse("show")
+
+              //borrarBusqueda(year)
+            }, 100);
+
+          }else{            
+            alert(response)
+            console.log(response)
+          }
+
+          elemento.prop('disabled', false);
+        }).catch(function(e){ 
+          alert(e);         
+          console.log(e)        
+          elemento.prop('disabled', false);
+        }); */
+      }
+
+      function pintarPoligonoBusquedas(geometria){
+
+        sourceBusquedas.clear();
+
+        var geometria = JSON.parse(geometria);//007020001040012001    007020001040
+
+        var feature = new ol.Feature({
+            geometry: new ol.geom.MultiPolygon(geometria.coordinates)
+        });
+
+
+        /*var feature = new ol.Feature({
+            geometry: new ol.geom.MultiLineString(geometria.coordinates)
+        });*/
+
+        sourceBusquedas.addFeature(feature); 
+        sourceSeleccion.addFeature(feature); 
+
+        //acercar la pantalla hacia la geometria
+        mapObject.getView().fit(feature.getGeometry().getExtent(), {padding: [170, 170, 170, 170]});
+
+        //mapObject.getView().animate({zoom: 19, duration: 250})  
+        //mapObject.getView().fit(feature.getGeometry().getExtent(), { duration: 1000});
+        //mapObject.getView().setZoom(19);
+
+
+        setTimeout(function(){ 
+          sourceSeleccion.removeFeature(feature);
+        }, timeOut);
+
+      }
+    </script>
+
+    <!-- script para el mapa openlayers -->
+    <script type="text/javascript">
+      
+      var funcionVisibilidadCapa = function () {
+        var layer = obtenerLayerAtName($(this).attr('id'));
+        if (layer !== null) {
+          layer.setVisible(!layer.getVisible());
+        }
+      }
+
+      var funcionOpacidadCapa = function () {
+
+        var valores = $(this).attr('id').split('|');
+        var item = obtenerLayerAtName(valores[0]);
+        item.setOpacity($(this).val() / 100);
+
+      }
+      
+      function inicializarMapaOpenLayer(datos){
+        mapObject = new ol.Map({
+          target: 'mapa',
+          controls: ol.control.defaults({attribution: false}).extend([attribution]),
+          view: new ol.View({
+            projection: proj_32613,
+            center: coordenadasCenterMapa, 
+            zoom: zoomMapa
+          })
+        });  
+
+        generarHtmlTablaContenido(mapObject, datos);
+
+        mapObject.addLayer(vectorBusquedas);
+
+        mapObject.addLayer(vectorSeleccion);  
+        
+        mapObject.addLayer(vectorPosition);
+        
+        mapObject.addOverlay(overlayPopUp);
+
+        //muestra la posicion del mouse
+        mapObject.addControl( new ol.control.MousePosition({
+          coordinateFormat: function(coord) {
+              return ol.coordinate.format(coord, 'X: {x}, Y: {y}', 4);
+          },
+          className: 'custom-mouse-position',
+          target: document.getElementById('mouse-position'),
+          undefinedHTML: '&nbsp;'
+        }));
+
+        //muestra la barra de escala en el mapa
+        mapObject.addControl(new ol.control.ScaleLine({
+          target: document.getElementById('scale-display'),
+          units: 'metric',
+          text: true,
+          bar: true,
+          steps: 4,
+          minWidth: 140
+        }));
+        
+        mapObject.on('singleclick', function(evt) { 
+          var coordenadas = evt.coordinate[0] + ' ' + evt.coordinate[1];
+
+          //verirficamos si esta visible la seccion de consulta a padron 
+          if ($('#seccion_street_view').is(':visible')) {
+            streetview(evt);
+          }else{
+            //obtenemos las capas visibles
+            const todoslayers = mapObject.getLayers().getArray();
+            var layers = [];
+            for (var i = 0; i < todoslayers.length; i++) {
+              if (todoslayers[i].getProperties().name === 'osm' || 
+                todoslayers[i].getProperties().name === 'terrain' ||
+                todoslayers[i].getProperties().name === 'cartaINEGI' ||
+                todoslayers[i].getProperties().name === 'ortoICES2019' ||
+                todoslayers[i].getProperties().name === 'ortoWMS') {
+                continue;
+              }else{
+                //capas que nos interesan consultar su informacion para mostrar el popup
+                if (todoslayers[i].getVisible()) {
+                  layers.push(todoslayers[i].getProperties().name);
+                }
+              }
+            }
+
+            if (layers.length > 0) {
+
+              var listPromise2 = [];
+
+              var promise = new Promise(function(resolve, reject) {
+
+                jQuery.ajax({
+                  type:'GET',
+                  data: { LAYERS : layers, p1 : coordenadas},
+                  cache:false,
+                  error:function(error){
+                      reject('error al consultar feature');
+                  },
+                  url: window.location.origin + window.location.pathname + '/' + "obtener_features",
+                  success:function(result){
+                      if (result.code == 200) {                       
+                          resolve(result.data);
+                      }else{
+                          reject(result.menssage);
+                      }
+                  }
+                });                   
+                  
+              });
+              listPromise2.push(promise);
+
+              Promise.all(listPromise2).then(function(response){
+                console.log(23232)
+                var info = [];
+                for (var z = 0; z < response[0].length; z++) {
+                  if (response[0][z].data !== null) {
+                    var info_capa = generarPopUp(response[0][z]);
+                    info.push(info_capa);
+                  }
+                }
+
+                contentPopup.innerHTML = info.join('') || '(Sin información.)';
+                overlayPopUp.setPosition(evt.coordinate);
+
+
+              }).catch(function(e){ 
+                console.info(e);
+              }); 
+
+
+            }else{
+              console.log("no hay informacion que mostrar.");
+              //overlayPopUp.setPosition(evt.coordinate);
+              //closer.blur();
+            }
+          }
+        });
+      
+      }
+      
+      function resetMapaOpenLayer(){
+        $('#seccion_tabla_contenido').empty();
+        mapObject.setTarget(null);
+        mapObject = null;
+        $('#mouse-position').empty();
+        $('#scale-display').empty();
+      }
+      
+      var funcionGenerarPdfIndicadoresNivelEstatal = function () {
+        //alert($(this).attr('name'));   
+        if($('#zonas_aridas_'+ $(this).attr('name')).is(':checked')){            
+          if($('#limiteEstatalNoroeste_geo').is(':checked')){
+            mapObject.getView().setCenter(coordenadasCenterMapa);
+            mapObject.getView().animate({zoom: zoomMapa, duration: 250}) 
+
+            exportarPDF('generar_pdf_indicadores_nivel_estatal','indicadoresnivelestatalPdf' + uuidv4(), $(this).attr('name'));
+
+          }else{
+            alert("Se necesita activar la capa de limite estatal noroeste")
+          }
+        }else{
+          alert("Se necesita activar la capa de zonas_aridas_"+ $(this).attr('name'))
+        }
+
+      }
+
+      var funcionGenerarPdfIndicadoresAridez = function () {
+        //alert($(this).attr('name'));   
+        if($('#zonas_aridas_'+ $(this).attr('name')).is(':checked')){  
+
+            mapObject.getView().setCenter(coordenadasCenterMapa);
+            mapObject.getView().animate({zoom: zoomMapa, duration: 250}) 
+
+            exportarPDF('generar_pdf_indicadores_aridez','indicadoresaridezPdf' + uuidv4(), $(this).attr('name'));
+          
+        }else{
+          alert("Se necesita activar la capa de zonas_aridas_"+ $(this).attr('name'))
+        }
+
+      }
+
+      var funcionGenerarPdfIndicadoresRegionesHidrologicas = function () {
+        //alert($(this).attr('name'));   
+        if($('#zonas_aridas_'+ $(this).attr('name')).is(':checked')){            
+          if($('#RegionesHidAdm').is(':checked')){
+            mapObject.getView().setCenter(coordenadasCenterMapa);
+            mapObject.getView().animate({zoom: zoomMapa, duration: 250}) 
+
+            exportarPDF('generar_pdf_indicadores_regiones_hidrologicas','indicadoresregioneshidrologicasPdf' + uuidv4(), $(this).attr('name'));
+
+          }else{
+            alert("Se necesita activar la capa de regiones hidrológico administrativas")
+          }
+        }else{
+          alert("Se necesita activar la capa de zonas_aridas_"+ $(this).attr('name'))
+        }
+
+      }
+      
+      var funcionGenerarPdfIndicadoresMunicipal = function () {
+        if($('#zonas_aridas_'+ $(this).attr('name')).is(':checked')){            
+          if($('#limite_municipal').is(':checked')){
+            mapObject.getView().setCenter(coordenadasCenterMapa);
+            mapObject.getView().animate({zoom: zoomMapa, duration: 250}) 
+
+            exportarPDF('generar_pdf_indicadores_municipal','indicadoresregionesmunicipalesPdf' + uuidv4(), $(this).attr('name'));
+
+          }else{
+            alert("Se necesita activar la capa de limite municipal")
+          }
+        }else{
+          alert("Se necesita activar la capa de zonas_aridas_"+ $(this).attr('name'))
+        }
+
+      }
+      
+      var funcionGenerarPdfIndicadoresUsyv = function () {  
+        if($('#zonas_aridas_'+ $(this).attr('name')).is(':checked')){            
+          if($('#uso_suelo_vegetacion').is(':checked')){
+            mapObject.getView().setCenter(coordenadasCenterMapa);
+            mapObject.getView().animate({zoom: zoomMapa, duration: 250}) 
+
+            exportarPDF('generar_pdf_indicadores_usyv','indicadoresusyvPdf' + uuidv4(), $(this).attr('name'));
+
+          }else{
+            alert("Se necesita activar la capa de uso de suelo y vegetación")
+          }
+        }else{
+          alert("Se necesita activar la capa de zonas_aridas_"+ $(this).attr('name'))
+        }
+
+      }
+
+      //mapas de tendencia
+            
+      var funcionGenerarPdfIndicadoresNivelEstatalTendencia = function () {
+        //alert($(this).attr('name'));   
+        if($('#tend_zonas_aridas_'+ $(this).attr('name')).is(':checked')){            
+          if($('#limiteEstatalNoroeste_geo').is(':checked')){
+            mapObject.getView().setCenter(coordenadasCenterMapa);
+            mapObject.getView().animate({zoom: zoomMapa, duration: 250}) 
+
+            exportarPDF('generar_pdf_indicadores_nivel_estatal_tendencia','indicadoresnivelestatalPdf_tendencia' + uuidv4(), $(this).attr('name'));
+
+          }else{
+            alert("Se necesita activar la capa de limite estatal noroeste")
+          }
+        }else{
+          alert("Se necesita activar la capa del mapa de tendencia zonas_aridas_"+ $(this).attr('name'))
+        }
+
+      }
+
+      var funcionGenerarPdfIndicadoresAridezTendencia = function () {
+        //alert($(this).attr('name'));   
+        if($('#tend_zonas_aridas_'+ $(this).attr('name')).is(':checked')){  
+
+            mapObject.getView().setCenter(coordenadasCenterMapa);
+            mapObject.getView().animate({zoom: zoomMapa, duration: 250}) 
+
+            exportarPDF('generar_pdf_indicadores_aridez_tendencia','indicadoresaridezPdf_tendencia' + uuidv4(), $(this).attr('name'));
+          
+        }else{
+          alert("Se necesita activar la capa del mapa de tendencia zonas_aridas_"+ $(this).attr('name'))
+        }
+
+      }
+
+      var funcionGenerarPdfIndicadoresRegionesHidrologicasTendencia = function () {
+        //alert($(this).attr('name'));   
+        if($('#tend_zonas_aridas_'+ $(this).attr('name')).is(':checked')){            
+          if($('#RegionesHidAdm').is(':checked')){
+            mapObject.getView().setCenter(coordenadasCenterMapa);
+            mapObject.getView().animate({zoom: zoomMapa, duration: 250}) 
+
+            exportarPDF('generar_pdf_indicadores_regiones_hidrologicas_tendencia','indicadoresregioneshidrologicasPdf_tendencia' + uuidv4(), $(this).attr('name'));
+
+          }else{
+            alert("Se necesita activar la capa de regiones hidrológico administrativas")
+          }
+        }else{
+          alert("Se necesita activar la capa del mapa de tendencia zonas_aridas_"+ $(this).attr('name'))
+        }
+
+      }
+
+      var funcionGenerarPdfIndicadoresMunicipalTendencia = function () {   
+        if($('#tend_zonas_aridas_'+ $(this).attr('name')).is(':checked')){            
+          if($('#limite_municipal').is(':checked')){
+            mapObject.getView().setCenter(coordenadasCenterMapa);
+            mapObject.getView().animate({zoom: zoomMapa, duration: 250}) 
+
+            exportarPDF('generar_pdf_indicadores_municipal_tendencia','indicadoresmunicipalPdf_tendencia' + uuidv4(), $(this).attr('name'));
+
+          }else{
+            alert("Se necesita activar la capa de limite municipal")
+          }
+        }else{
+          alert("Se necesita activar la capa del mapa de tendencia zonas_aridas_"+ $(this).attr('name'))
+        }
+
+      }
+
+      var funcionGenerarPdfIndicadoresUsyvTendencia = function () {
+        if($('#tend_zonas_aridas_'+ $(this).attr('name')).is(':checked')){            
+          if($('#uso_suelo_vegetacion').is(':checked')){
+            mapObject.getView().setCenter(coordenadasCenterMapa);
+            mapObject.getView().animate({zoom: zoomMapa, duration: 250}) 
+
+            exportarPDF('generar_pdf_indicadores_usyv_tendencia','indicadoresusyvPdf_tendencia' + uuidv4(), $(this).attr('name'));
+
+          }else{
+            alert("Se necesita activar la capa de uso de suelo y vegetación")
+          }
+        }else{
+          alert("Se necesita activar la capa del mapa de tendencia zonas_aridas_"+ $(this).attr('name'))
+        }
+
+      }
+
+      function actualizarTablaContenido(){
+        var listPromise3 = [];
+
+        var promise = new Promise(function(resolve, reject) {
+
+          jQuery.ajax({
+            type:'GET',
+            cache:false,
+            error:function(error){
+                reject('error al consultar la tabla de contenidos');
+            },
+            url: window.location.origin + window.location.pathname + '/' + "tablaContenido",
+            success:function(result){
+                if (result.code == 200) {                       
+                    resolve(result.data);
+                }else{
+                    reject(result.menssage);
+                }
+            }
+          });                   
+            
+        });
+        listPromise3.push(promise);
+
+        Promise.all(listPromise3).then(function(response){
+
+          resetMapaOpenLayer();
+          inicializarMapaOpenLayer(response[0]);        
+          
+        }).catch(function(e){ 
+          console.info(e);
+        }); 
+      }
+     
+      function generarHtmlTablaContenido(map, datos){
+
+        var oDivConte  = document.createElement('div');  
+        oDivConte.classList = "row";
+        oDivConte.style.margin = "10px";
+
+        var oUlPrincipal  = document.createElement('ul');  
+        oUlPrincipal.classList = "list-unstyled components w-100";
+        oUlPrincipal.style.overflow = 'hidden';
+
+        var oP  = document.createElement('p'); 
+        oP.classList = "m-0";
+        oP.style.fontWeight = 500;
+        oP.style.color = 'rgba(0,0,0)';
+        oP.style.fontSize = '21px';
+        oP.style.padding = '10px';
+        oP.innerHTML= 'Tabla de Contenidos';
+
+        oDivConte.appendChild(oP);
+        oDivConte.appendChild(oUlPrincipal);
+
+        for (var i = 0; i < datos.length; i++) {
+
+          if(i == datos.length-1){//mapa tendencial
+              var oLi14  = document.createElement('li');  
+
+              var oA14  = document.createElement('a'); 
+              oA14.setAttribute("href", '#' + datos[i].id);
+              oA14.setAttribute("data-toggle", 'collapse');
+              oA14.setAttribute("aria-expanded", 'false');
+              oA14.classList = "dropdown-toggle";
+              oA14.style.fontWeight = 500;
+              oA14.style.whiteSpace = 'normal';
+              oA14.innerHTML= datos[i].categoria;
+              oLi14.appendChild(oA14);
+
+
+              var oUlSecundario14  = document.createElement('ul');  
+              oUlSecundario14.classList = "collapse list-unstyled";
+              oUlSecundario14.setAttribute("id", datos[i].id);
+
+
+              for (var y = 0; y < datos[i].elementos.length; y++) {
+
+
+                var oLi1  = document.createElement('li');  
+
+                var oA  = document.createElement('a'); 
+                oA.setAttribute("href", '#' + datos[i].elementos[y].id);
+                oA.setAttribute("data-toggle", 'collapse');
+                oA.setAttribute("aria-expanded", 'false');
+                oA.classList = "dropdown-toggle";
+                oA.style.fontWeight = 500;
+                oA.style.whiteSpace = 'normal';
+                oA.style.backgroundColor = 'darkgray';
+                oA.innerHTML= datos[i].elementos[y].year;
+                oLi1.appendChild(oA);
+
+
+                var oUlSecundario  = document.createElement('ul');  
+                oUlSecundario.classList = "collapse list-unstyled";
+                oUlSecundario.setAttribute("id", datos[i].elementos[y].id);
+
+                for (var n = 0; n < datos[i].elementos[y].subCategorias.length; n++) {
+                  if(datos[i].elementos[y].subCategorias[n].id_sub_categoria !== undefined){
+                    var oLi2  = document.createElement('li');  
+
+                    var oA  = document.createElement('a'); 
+                    oA.setAttribute("href", '#' + datos[i].elementos[y].subCategorias[n].id_sub_categoria);
+                    oA.setAttribute("data-toggle", 'collapse');
+                    oA.setAttribute("aria-expanded", 'false');
+                    oA.classList = "dropdown-toggle";
+                    oA.style.fontWeight = 500;
+                    oA.style.whiteSpace = 'normal';
+                    oA.style.backgroundColor = '#DDD4C6'; 
+                    oA.innerHTML= datos[i].elementos[y].subCategorias[n].subCategoria;
+                    oLi2.appendChild(oA);
+
+                    var oUlTercero  = document.createElement('ul');  
+                    oUlTercero.classList = "collapse list-unstyled";
+                    oUlTercero.setAttribute("id", datos[i].elementos[y].subCategorias[n].id_sub_categoria);
+
+                    if(datos[i].elementos[y].subCategorias[n].elementos.length > 0){
+
+                      for (var j = 0; j < datos[i].elementos[y].subCategorias[n].elementos.length; j++) {
+
+                        var oLi3  = document.createElement('li');  
+
+                        var oDivContenedor  = document.createElement('div'); 
+                        oDivContenedor.classList = "row p-2 m-0";
+                        oDivContenedor.style.backgroundColor = '#DDD4C6';
+
+                        var oDiv1  = document.createElement('div'); 
+                        oDiv1.classList = "col-2 col-md-2";
+
+                        var oButton  = document.createElement('button'); 
+                        oButton.classList = "btn btn-sm";
+                        oButton.setAttribute("data-toggle", 'collapse');
+                        oButton.setAttribute("href", '#' + datos[i].elementos[y].subCategorias[n].elementos[j].id_collapse);
+                        oButton.setAttribute("aria-expanded", 'false');
+                        oButton.style.backgroundColor = '#8e2919';
+
+
+                        var oI  = document.createElement('i'); 
+                        oI.classList = "fa fa-angle-down";
+                        oI.setAttribute("aria-hidden", 'true');
+                        oI.style.color = 'white';
+                        oButton.appendChild(oI);
+                        oDiv1.appendChild(oButton);
+                        oDivContenedor.appendChild(oDiv1);
+
+
+
+                        var oDiv2  = document.createElement('div'); 
+                        oDiv2.classList = "col-7 col-md-7 d-flex align-items-center";
+
+                        var oSpan  = document.createElement('span'); 
+                        oSpan.style.color = 'black'; 
+                        oSpan.style.fontWeight = 500;
+                        oSpan.innerHTML= datos[i].elementos[y].subCategorias[n].elementos[j].nombre;
+                        oDiv2.appendChild(oSpan);
+                        oDivContenedor.appendChild(oDiv2);
+
+
+
+                        var oDiv3  = document.createElement('div'); 
+                        oDiv3.classList = "col-3 col-md-3 d-flex align-items-center"; 
+                        oDiv3.style.padding = '10px'; 
+
+
+                        var oInput  = document.createElement('input');
+                        oInput.setAttribute("id", datos[i].elementos[y].subCategorias[n].elementos[j].capa);
+                        oInput.setAttribute("type", 'checkbox'); 
+                        oInput.style.transform = "scale(1.3)";                     
+                        oInput.addEventListener("change", funcionVisibilidadCapa);
+
+                        if (datos[i].elementos[y].subCategorias[n].elementos[j].visible) {
+                          oInput.setAttribute("checked", 'true');
+                        }
+
+                        //boton de descarga
+                        var oAncleDescarga  = document.createElement('a'); 
+                        oAncleDescarga.classList = "btn btn-sm p-0 pl-1";                 
+                        oAncleDescarga.innerHTML= "ZIP";  
+                        oAncleDescarga.style.textDecoration = "underline";
+                        oAncleDescarga.href = datos[i].elementos[y].subCategorias[n].elementos[j].url_descarga
+                        oAncleDescarga.target = "_blank"
+                        
+
+                        oDiv3.appendChild(oInput);
+                        oDiv3.appendChild(oAncleDescarga);
+
+                        oDivContenedor.appendChild(oDiv3);
+
+
+
+
+
+                        var oDiv4  = document.createElement('div'); 
+                        oDiv4.setAttribute("id", datos[i].elementos[y].subCategorias[n].elementos[j].id_collapse);
+                        oDiv4.classList = "container-fluid collapse";
+
+
+                        var oDiv5  = document.createElement('div'); 
+                        oDiv5.style.color = "black";
+                        //oDiv5.style.background = "lavender";
+                        oDiv5.style.marginTop = "15px";
+
+                        var oOpacidad  = document.createElement('span'); 
+                        oOpacidad.innerHTML= 'Opacidad';
+
+                        var oInput1  = document.createElement('input');
+                        oInput1.setAttribute("id", datos[i].elementos[y].subCategorias[n].elementos[j].capa + '|Opacidad');
+                        oInput1.setAttribute("type", 'range');  
+                        oInput1.setAttribute("min", '0');
+                        oInput1.setAttribute("max", '100');
+                        oInput1.setAttribute("value", '100');
+                        oInput1.style.width = '100%';
+                        oInput1.addEventListener('change', funcionOpacidadCapa);
+                        oDiv5.appendChild(oOpacidad);
+                        oDiv5.appendChild(oInput1);
+
+
+
+
+                        var oSimbología  = document.createElement('span'); 
+                        oSimbología.innerHTML= 'Simbología';
+
+                        var oImg  = document.createElement('img');      
+                        oImg.style.margin = '5px 0';
+                        oImg.setAttribute("src", datos[i].elementos[y].subCategorias[n].elementos[j].url_simbologia);  
+                        oImg.style.display = 'block';
+                        oDiv5.appendChild(oSimbología);
+                        oDiv5.appendChild(oImg);
+
+
+                        oDiv4.appendChild(oDiv5);
+                        oDivContenedor.appendChild(oDiv4);
+
+                        oLi3.appendChild(oDivContenedor);
+                        oUlTercero.appendChild(oLi3);
+
+                        layer = mapObject.getLayers().getArray().find(layer => layer.get('name') == datos[i].elementos[y].subCategorias[n].elementos[j].capa);
+                        if (layer == null) {
+                          //agregamos las capas al mapa principal                  
+                          mapObject.addLayer(new ol.layer.Tile({
+                            visible: datos[i].elementos[y].subCategorias[n].elementos[j].visible,
+                            name: datos[i].elementos[y].subCategorias[n].elementos[j].capa,
+                            source: new ol.source.TileWMS({
+                              url: datos[i].elementos[y].subCategorias[n].elementos[j].url,
+                              crossOrigin: 'anonymous'
+                            })
+                          }));
+                        }
+                        
+                        oLi2.appendChild(oUlTercero);
+                      }
+                      
+                    }else{
+                      //mostramos el boton en la seccion de indicadores a nivel estatal
+                      if(datos[i].elementos[y].subCategorias[n].name == "SubMenuIndicadoresEstatalTendencia"){
+                        var oLi3  = document.createElement('li');  
+
+                        var oDivContenedor  = document.createElement('div'); 
+                        oDivContenedor.classList = "row p-2 m-0";
+                        oDivContenedor.style.backgroundColor = '#DDD4C6';
+
+                        var oDiv1  = document.createElement('div'); 
+                        oDiv1.classList = "col-12 col-md-12";
+
+                        var oButton  = document.createElement('button'); 
+                        oButton.classList = "btn btn-sm btn-primary";                    
+                        oButton.setAttribute("id", datos[i].elementos[y].subCategorias[n].id_sub_categoria);
+                        oButton.setAttribute("name", datos[i].elementos[y].year);
+                        oButton.innerHTML= "Generar PDF..";
+                        oButton.addEventListener("click", funcionGenerarPdfIndicadoresNivelEstatalTendencia);
+
+                        oDiv1.appendChild(oButton);
+                        oDivContenedor.appendChild(oDiv1);
+
+                        oLi3.appendChild(oDivContenedor);
+                        oUlTercero.appendChild(oLi3);
+                        oLi2.appendChild(oUlTercero);
+                      }else if(datos[i].elementos[y].subCategorias[n].name == "SubMenuIndicadoresAridezTendencia"){
+                        var oLi3  = document.createElement('li');  
+
+                        var oDivContenedor  = document.createElement('div'); 
+                        oDivContenedor.classList = "row p-2 m-0";
+                        oDivContenedor.style.backgroundColor = '#DDD4C6';
+
+                        var oDiv1  = document.createElement('div'); 
+                        oDiv1.classList = "col-12 col-md-12";
+
+                        var oButton  = document.createElement('button'); 
+                        oButton.classList = "btn btn-sm btn-primary";                    
+                        oButton.setAttribute("id", datos[i].elementos[y].subCategorias[n].id_sub_categoria);
+                        oButton.setAttribute("name", datos[i].elementos[y].year);
+                        oButton.innerHTML= "Generar PDF..";
+                        oButton.addEventListener("click", funcionGenerarPdfIndicadoresAridezTendencia);
+
+                        oDiv1.appendChild(oButton);
+                        oDivContenedor.appendChild(oDiv1);
+
+                        oLi3.appendChild(oDivContenedor);
+                        oUlTercero.appendChild(oLi3);
+                        oLi2.appendChild(oUlTercero);
+                      }else if(datos[i].elementos[y].subCategorias[n].name == "SubMenuIndicadoresRegionesHidraulicasTendencia"){
+                        var oLi3  = document.createElement('li');  
+
+                        var oDivContenedor  = document.createElement('div'); 
+                        oDivContenedor.classList = "row p-2 m-0";
+                        oDivContenedor.style.backgroundColor = '#DDD4C6';
+
+                        var oDiv1  = document.createElement('div'); 
+                        oDiv1.classList = "col-12 col-md-12";
+
+                        var oButton  = document.createElement('button'); 
+                        oButton.classList = "btn btn-sm btn-primary";                    
+                        oButton.setAttribute("id", datos[i].elementos[y].subCategorias[n].id_sub_categoria);
+                        oButton.setAttribute("name", datos[i].elementos[y].year);
+                        oButton.innerHTML= "Generar PDF..";
+                        oButton.addEventListener("click", funcionGenerarPdfIndicadoresRegionesHidrologicasTendencia);
+
+                        oDiv1.appendChild(oButton);
+                        oDivContenedor.appendChild(oDiv1);
+
+                        oLi3.appendChild(oDivContenedor);
+                        oUlTercero.appendChild(oLi3);
+                        oLi2.appendChild(oUlTercero);
+                      }else if(datos[i].elementos[y].subCategorias[n].name == "SubMenuIndicadoresMunicipalTendencia"){
+                        var oLi3  = document.createElement('li');  
+
+                        var oDivContenedor  = document.createElement('div'); 
+                        oDivContenedor.classList = "row p-2 m-0";
+                        oDivContenedor.style.backgroundColor = '#DDD4C6';
+
+                        var oDiv1  = document.createElement('div'); 
+                        oDiv1.classList = "col-12 col-md-12";
+
+                        var oButton  = document.createElement('button'); 
+                        oButton.classList = "btn btn-sm btn-primary";                    
+                        oButton.setAttribute("id", datos[i].elementos[y].subCategorias[n].id_sub_categoria);
+                        oButton.setAttribute("name", datos[i].elementos[y].year);
+                        oButton.innerHTML= "Generar PDF..";
+                        oButton.addEventListener("click", funcionGenerarPdfIndicadoresMunicipalTendencia);
+
+                        oDiv1.appendChild(oButton);
+                        oDivContenedor.appendChild(oDiv1);
+
+                        oLi3.appendChild(oDivContenedor);
+                        oUlTercero.appendChild(oLi3);
+                        oLi2.appendChild(oUlTercero);
+                      }else if(datos[i].elementos[y].subCategorias[n].name == "SubMenuIndicadoresUsyvTendencia"){
+                        var oLi3  = document.createElement('li');  
+
+                        var oDivContenedor  = document.createElement('div'); 
+                        oDivContenedor.classList = "row p-2 m-0";
+                        oDivContenedor.style.backgroundColor = '#DDD4C6';
+
+                        var oDiv1  = document.createElement('div'); 
+                        oDiv1.classList = "col-12 col-md-12";
+
+                        var oButton  = document.createElement('button'); 
+                        oButton.classList = "btn btn-sm btn-primary";                    
+                        oButton.setAttribute("id", datos[i].elementos[y].subCategorias[n].id_sub_categoria);
+                        oButton.setAttribute("name", datos[i].elementos[y].year);
+                        oButton.innerHTML= "Generar PDF..";
+                        oButton.addEventListener("click", funcionGenerarPdfIndicadoresUsyvTendencia);
+
+                        oDiv1.appendChild(oButton);
+                        oDivContenedor.appendChild(oDiv1);
+
+                        oLi3.appendChild(oDivContenedor);
+                        oUlTercero.appendChild(oLi3);
+                        oLi2.appendChild(oUlTercero);
+                      }
+                    }        
+                    oUlSecundario.appendChild(oLi2);
+                  }
+                }
+                oLi1.appendChild(oUlSecundario);
+                oUlSecundario14.appendChild(oLi1);
+
+              }
+
+              oLi14.appendChild(oUlSecundario14);
+              oUlPrincipal.appendChild(oLi14);
+
+
+
+
+
+
+
+          }else{
+
+            if(datos[i].elementos){
+              var oLi1  = document.createElement('li');  
+
+              var oA  = document.createElement('a'); 
+              oA.setAttribute("href", '#' + datos[i].id);
+              oA.setAttribute("data-toggle", 'collapse');
+              oA.setAttribute("aria-expanded", 'false');
+              oA.classList = "dropdown-toggle";
+              oA.style.fontWeight = 500;
+              oA.style.whiteSpace = 'normal';
+              oA.innerHTML= datos[i].categoria;
+              oLi1.appendChild(oA);
+
+
+              var oUlSecundario  = document.createElement('ul');  
+              oUlSecundario.classList = "collapse list-unstyled";
+              oUlSecundario.setAttribute("id", datos[i].id);
+
+
+              for (var y = 0; y < datos[i].elementos.length; y++) {
+
+                var oLi2  = document.createElement('li');  
+
+                var oDivContenedor  = document.createElement('div'); 
+                oDivContenedor.classList = "row p-2 m-0";
+                oDivContenedor.style.backgroundColor = '#DDD4C6';
+
+                var oDiv1  = document.createElement('div'); 
+                oDiv1.classList = "col-2 col-md-2";
+
+                var oButton  = document.createElement('button'); 
+                oButton.classList = "btn btn-sm";
+                oButton.setAttribute("data-toggle", 'collapse');
+                oButton.setAttribute("href", '#' + datos[i].elementos[y].id_collapse);
+                oButton.setAttribute("aria-expanded", 'false');
+                oButton.style.backgroundColor = '#8e2919';
+
+
+                var oI  = document.createElement('i'); 
+                oI.classList = "fa fa-angle-down";
+                oI.setAttribute("aria-hidden", 'true');
+                oI.style.color = 'white';
+                oButton.appendChild(oI);
+                oDiv1.appendChild(oButton);
+                oDivContenedor.appendChild(oDiv1);
+
+
+
+                var oDiv2  = document.createElement('div'); 
+                oDiv2.classList = "col-7 col-md-7 d-flex align-items-center";
+
+                var oSpan  = document.createElement('span'); 
+                oSpan.style.color = 'black'; 
+                oSpan.style.fontWeight = 500;
+                oSpan.innerHTML= datos[i].elementos[y].nombre;
+                oDiv2.appendChild(oSpan);
+                oDivContenedor.appendChild(oDiv2);
+
+
+
+                var oDiv3  = document.createElement('div'); 
+                oDiv3.classList = "col-3 col-md-3";
+
+
+                var oInput  = document.createElement('input');
+                oInput.setAttribute("id", datos[i].elementos[y].capa);
+                oInput.setAttribute("type", 'checkbox'); 
+                oInput.style.transform = "scale(1.3)";  
+                /*oInput.setAttribute("data-toggle", 'toggle');
+                oInput.setAttribute("data-onstyle", 'info');
+                oInput.setAttribute("data-size", 'sm');
+                oInput.setAttribute("data-on", '<i>');
+                oInput.setAttribute("data-off", '<i>');  */ 
+                oInput.addEventListener('change', funcionVisibilidadCapa);
+
+                if (datos[i].elementos[y].visible) {
+                  oInput.setAttribute("checked", 'true');
+                }
+
+                oDiv3.appendChild(oInput);
+                oDivContenedor.appendChild(oDiv3);
+
+
+
+
+
+                var oDiv4  = document.createElement('div'); 
+                oDiv4.setAttribute("id", datos[i].elementos[y].id_collapse);
+                oDiv4.classList = "container-fluid collapse";
+
+
+                var oDiv5  = document.createElement('div'); 
+                oDiv5.style.color = "black";
+                //oDiv5.style.background = "lavender";
+                oDiv5.style.marginTop = "15px";
+
+                var oOpacidad  = document.createElement('span'); 
+                oOpacidad.innerHTML= 'Opacidad';
+
+                var oInput1  = document.createElement('input');
+                oInput1.setAttribute("id", datos[i].elementos[y].capa + '|Opacidad');
+                oInput1.setAttribute("type", 'range');  
+                oInput1.setAttribute("min", '0');
+                oInput1.setAttribute("max", '100');
+                oInput1.setAttribute("value", '100');
+                oInput1.style.width = '100%';              
+                oInput1.addEventListener('change', funcionOpacidadCapa);
+                oDiv5.appendChild(oOpacidad);
+                oDiv5.appendChild(oInput1);
+
+
+
+
+                var oSimbología  = document.createElement('span'); 
+                oSimbología.innerHTML= 'Simbología';
+
+                var oImg  = document.createElement('img');      
+                oImg.style.margin = '5px 0';
+                oImg.setAttribute("src", datos[i].elementos[y].url_simbologia);  
+                oImg.style.display = 'block';
+                oDiv5.appendChild(oSimbología);
+                oDiv5.appendChild(oImg);
+
+
+                oDiv4.appendChild(oDiv5);
+                oDivContenedor.appendChild(oDiv4);
+
+                oLi2.appendChild(oDivContenedor);
+                oUlSecundario.appendChild(oLi2);
+
+
+                //agregamos las capas al mapa principal
+                if (datos[i].elementos[y].capa === 'osm' || datos[i].elementos[y].capa === 'terrain') {
+
+                  if (datos[i].elementos[y].capa === 'osm') {
+
+                    layer = mapObject.getLayers().getArray().find(layer => layer.get('name') == datos[i].elementos[y].capa);
+                    if (layer == null) {
+
+                      mapObject.addLayer(new ol.layer.Tile({
+                        visible: datos[i].elementos[y].visible,
+                        name: datos[i].elementos[y].capa,
+                        source: new ol.source.OSM()
+                      }));
+                    }
+
+                  }else{
+
+                    layer = mapObject.getLayers().getArray().find(layer => layer.get('name') == datos[i].elementos[y].capa);
+                    if (layer == null) {
+
+                      mapObject.addLayer(new ol.layer.Tile({
+                        visible: datos[i].elementos[y].visible,
+                        name: datos[i].elementos[y].capa,
+                        source: new ol.source.Stamen({
+                          layer: datos[i].elementos[y].capa
+                        })
+                      }));
+                    }
+
+                  }
+
+                }else if (datos[i].elementos[y].capa === 'ortoWMS' ) {
+
+                  layer = mapObject.getLayers().getArray().find(layer => layer.get('name') == datos[i].elementos[y].capa);
+                  if (layer == null) {
+
+                    mapObject.addLayer(new ol.layer.Tile({
+                      visible: datos[i].elementos[y].visible,
+                      name: datos[i].elementos[y].capa,
+                      source: new ol.source.TileWMS({
+                        url: datos[i].elementos[y].url,
+                        crossOrigin: 'anonymous'
+                      })
+                    }));
+                  }
+                  
+
+                }else{
+
+                  layer = mapObject.getLayers().getArray().find(layer => layer.get('name') == datos[i].elementos[y].capa);
+                  if (layer == null) {
+
+                    mapObject.addLayer(new ol.layer.Tile({
+                      visible: datos[i].elementos[y].visible,
+                      name: datos[i].elementos[y].capa,
+                      source: new ol.source.TileWMS({
+                        url: datos[i].elementos[y].url,
+                        crossOrigin: 'anonymous'
+                      })
+                    }));
+                  }
+                }
+
+              }
+
+              oLi1.appendChild(oUlSecundario);
+              oUlPrincipal.appendChild(oLi1);
+            }else{
+
+              var oLi1  = document.createElement('li');  
+
+              var oA  = document.createElement('a'); 
+              oA.setAttribute("href", '#' + datos[i].id);
+              oA.setAttribute("data-toggle", 'collapse');
+              oA.setAttribute("aria-expanded", 'false');
+              oA.classList = "dropdown-toggle";
+              oA.style.fontWeight = 500;
+              oA.style.whiteSpace = 'normal';           
+              oA.innerHTML= datos[i].categoria;
+              oLi1.appendChild(oA);
+
+
+              var oUlSecundario  = document.createElement('ul');  
+              oUlSecundario.classList = "collapse list-unstyled";
+              oUlSecundario.style.backgroundColor = '#DDD4C6';   
+              oUlSecundario.setAttribute("id", datos[i].id);
+
+                for (var y = 0; y < datos[i].subCategorias.length; y++) {
+                  var oLi2  = document.createElement('li');  
+
+                  var oA  = document.createElement('a'); 
+                  oA.setAttribute("href", '#' + datos[i].subCategorias[y].id_sub_categoria);
+                  oA.setAttribute("data-toggle", 'collapse');
+                  oA.setAttribute("aria-expanded", 'false');
+                  oA.classList = "dropdown-toggle";
+                  oA.style.fontWeight = 500;
+                  oA.style.whiteSpace = 'normal';
+                  oA.style.backgroundColor = '#DDD4C6';  
+                  oA.innerHTML= datos[i].subCategorias[y].subCategoria;
+                  oLi2.appendChild(oA);
+
+                  var oUlTercero  = document.createElement('ul');  
+                  oUlTercero.classList = "collapse list-unstyled";
+                  oUlTercero.setAttribute("id", datos[i].subCategorias[y].id_sub_categoria);
+
+                  if(datos[i].subCategorias[y].elementos.length > 0){
+
+                    for (var j = 0; j < datos[i].subCategorias[y].elementos.length; j++) {
+
+                      var oLi3  = document.createElement('li');  
+
+                      var oDivContenedor  = document.createElement('div'); 
+                      oDivContenedor.classList = "row p-2 m-0";
+                      oDivContenedor.style.backgroundColor = '#DDD4C6';
+
+                      var oDiv1  = document.createElement('div'); 
+                      oDiv1.classList = "col-2 col-md-2";
+
+                      var oButton  = document.createElement('button'); 
+                      oButton.classList = "btn btn-sm";
+                      oButton.setAttribute("data-toggle", 'collapse');
+                      oButton.setAttribute("href", '#' + datos[i].subCategorias[y].elementos[j].id_collapse);
+                      oButton.setAttribute("aria-expanded", 'false');
+                      oButton.style.backgroundColor = '#8e2919';
+
+
+                      var oI  = document.createElement('i'); 
+                      oI.classList = "fa fa-angle-down";
+                      oI.setAttribute("aria-hidden", 'true');
+                      oI.style.color = 'white';
+                      oButton.appendChild(oI);
+                      oDiv1.appendChild(oButton);
+                      oDivContenedor.appendChild(oDiv1);
+
+
+
+                      var oDiv2  = document.createElement('div'); 
+                      oDiv2.classList = "col-7 col-md-7 d-flex align-items-center";
+
+                      var oSpan  = document.createElement('span'); 
+                      oSpan.style.color = 'black'; 
+                      oSpan.style.fontWeight = 500;
+                      oSpan.innerHTML= datos[i].subCategorias[y].elementos[j].nombre;
+                      oDiv2.appendChild(oSpan);
+                      oDivContenedor.appendChild(oDiv2);
+
+
+
+                      var oDiv3  = document.createElement('div'); 
+                      oDiv3.classList = "col-3 col-md-3 d-flex align-items-center"; 
+                      oDiv3.style.padding = '10px'; 
+
+
+                      var oInput  = document.createElement('input');
+                      oInput.setAttribute("id", datos[i].subCategorias[y].elementos[j].capa);
+                      oInput.setAttribute("type", 'checkbox'); 
+                      oInput.style.transform = "scale(1.3)";                  
+                      oInput.addEventListener("change", funcionVisibilidadCapa);
+
+                      if (datos[i].subCategorias[y].elementos[j].visible) {
+                        oInput.setAttribute("checked", 'true');
+                      }
+                      console.log(datos[i].subCategorias[y].elementos[j].url_descarga)
+                      //boton de descarga
+                      var oAncleDescarga  = document.createElement('a'); 
+                      oAncleDescarga.classList = "btn btn-sm p-0 pl-1";                 
+                      oAncleDescarga.innerHTML= "ZIP";                      
+                      oAncleDescarga.style.textDecoration = "underline";
+                      oAncleDescarga.href = datos[i].subCategorias[y].elementos[j].url_descarga
+                      oAncleDescarga.target = "_blank"
+
+
+                      oDiv3.appendChild(oInput);
+                      oDiv3.appendChild(oAncleDescarga);
+
+                      oDivContenedor.appendChild(oDiv3);
+
+
+
+
+
+                      var oDiv4  = document.createElement('div'); 
+                      oDiv4.setAttribute("id", datos[i].subCategorias[y].elementos[j].id_collapse);
+                      oDiv4.classList = "container-fluid collapse";
+
+
+                      var oDiv5  = document.createElement('div'); 
+                      oDiv5.style.color = "black";
+                      //oDiv5.style.background = "lavender";
+                      oDiv5.style.marginTop = "15px";
+
+                      var oOpacidad  = document.createElement('span'); 
+                      oOpacidad.innerHTML= 'Opacidad';
+
+                      var oInput1  = document.createElement('input');
+                      oInput1.setAttribute("id", datos[i].subCategorias[y].elementos[j].capa + '|Opacidad');
+                      oInput1.setAttribute("type", 'range');  
+                      oInput1.setAttribute("min", '0');
+                      oInput1.setAttribute("max", '100');
+                      oInput1.setAttribute("value", '100');
+                      oInput1.style.width = '100%';
+                      oInput1.addEventListener('change', funcionOpacidadCapa);
+                      oDiv5.appendChild(oOpacidad);
+                      oDiv5.appendChild(oInput1);
+
+
+
+
+                      var oSimbología  = document.createElement('span'); 
+                      oSimbología.innerHTML= 'Simbología';
+
+                      var oImg  = document.createElement('img');      
+                      oImg.style.margin = '5px 0';
+                      oImg.setAttribute("src", datos[i].subCategorias[y].elementos[j].url_simbologia);  
+                      oImg.style.display = 'block';
+                      oDiv5.appendChild(oSimbología);
+                      oDiv5.appendChild(oImg);
+
+
+                      oDiv4.appendChild(oDiv5);
+                      oDivContenedor.appendChild(oDiv4);
+
+                      oLi3.appendChild(oDivContenedor);
+                      oUlTercero.appendChild(oLi3);
+
+                      layer = mapObject.getLayers().getArray().find(layer => layer.get('name') == datos[i].subCategorias[y].elementos[j].capa);
+                      if (layer == null) {
+                        //agregamos las capas al mapa principal                  
+                        mapObject.addLayer(new ol.layer.Tile({
+                          visible: datos[i].subCategorias[y].elementos[j].visible,
+                          name: datos[i].subCategorias[y].elementos[j].capa,
+                          source: new ol.source.TileWMS({
+                            url: datos[i].subCategorias[y].elementos[j].url,
+                            crossOrigin: 'anonymous'
+                          })
+                        }));
+                      }
+                      
+                      oLi2.appendChild(oUlTercero);
+                    }
+                    
+                  }else{
+                    //mostramos el boton en la seccion de indicadores a nivel estatal
+                    if(datos[i].subCategorias[y].name == "SubMenuIndicadoresEstatal"){
+                      var oLi3  = document.createElement('li');  
+
+                      var oDivContenedor  = document.createElement('div'); 
+                      oDivContenedor.classList = "row p-2 m-0";
+                      oDivContenedor.style.backgroundColor = '#DDD4C6';
+
+                      var oDiv1  = document.createElement('div'); 
+                      oDiv1.classList = "col-12 col-md-12";
+
+                      var oButton  = document.createElement('button'); 
+                      oButton.classList = "btn btn-sm btn-primary";                    
+                      oButton.setAttribute("id", datos[i].subCategorias[y].id_sub_categoria);
+                      oButton.setAttribute("name", datos[i].categoria);
+                      oButton.innerHTML= "Generar PDF..";
+                      oButton.addEventListener("click", funcionGenerarPdfIndicadoresNivelEstatal);
+
+                      oDiv1.appendChild(oButton);
+                      oDivContenedor.appendChild(oDiv1);
+
+                      oLi3.appendChild(oDivContenedor);
+                      oUlTercero.appendChild(oLi3);
+                      oLi2.appendChild(oUlTercero);
+                    }else if(datos[i].subCategorias[y].name == "SubMenuIndicadoresAridez"){
+                      var oLi3  = document.createElement('li');  
+
+                      var oDivContenedor  = document.createElement('div'); 
+                      oDivContenedor.classList = "row p-2 m-0";
+                      oDivContenedor.style.backgroundColor = '#DDD4C6';
+
+                      var oDiv1  = document.createElement('div'); 
+                      oDiv1.classList = "col-12 col-md-12";
+
+                      var oButton  = document.createElement('button'); 
+                      oButton.classList = "btn btn-sm btn-primary";                    
+                      oButton.setAttribute("id", datos[i].subCategorias[y].id_sub_categoria);
+                      oButton.setAttribute("name", datos[i].categoria);
+                      oButton.innerHTML= "Generar PDF..";
+                      oButton.addEventListener("click", funcionGenerarPdfIndicadoresAridez);
+
+                      oDiv1.appendChild(oButton);
+                      oDivContenedor.appendChild(oDiv1);
+
+                      oLi3.appendChild(oDivContenedor);
+                      oUlTercero.appendChild(oLi3);
+                      oLi2.appendChild(oUlTercero);
+                    }else if(datos[i].subCategorias[y].name == "SubMenuIndicadoresRegionesHidraulicas"){
+                      var oLi3  = document.createElement('li');  
+
+                      var oDivContenedor  = document.createElement('div'); 
+                      oDivContenedor.classList = "row p-2 m-0";
+                      oDivContenedor.style.backgroundColor = '#DDD4C6';
+
+                      var oDiv1  = document.createElement('div'); 
+                      oDiv1.classList = "col-12 col-md-12";
+
+                      var oButton  = document.createElement('button'); 
+                      oButton.classList = "btn btn-sm btn-primary";                    
+                      oButton.setAttribute("id", datos[i].subCategorias[y].id_sub_categoria);
+                      oButton.setAttribute("name", datos[i].categoria);
+                      oButton.innerHTML= "Generar PDF..";
+                      oButton.addEventListener("click", funcionGenerarPdfIndicadoresRegionesHidrologicas);
+
+                      oDiv1.appendChild(oButton);
+                      oDivContenedor.appendChild(oDiv1);
+
+                      oLi3.appendChild(oDivContenedor);
+                      oUlTercero.appendChild(oLi3);
+                      oLi2.appendChild(oUlTercero);
+                    }else if(datos[i].subCategorias[y].name == "SubMenuIndicadoresMunicipal"){
+                      var oLi3  = document.createElement('li');  
+
+                      var oDivContenedor  = document.createElement('div'); 
+                      oDivContenedor.classList = "row p-2 m-0";
+                      oDivContenedor.style.backgroundColor = '#DDD4C6';
+
+                      var oDiv1  = document.createElement('div'); 
+                      oDiv1.classList = "col-12 col-md-12";
+
+                      var oButton  = document.createElement('button'); 
+                      oButton.classList = "btn btn-sm btn-primary";                    
+                      oButton.setAttribute("id", datos[i].subCategorias[y].id_sub_categoria);
+                      oButton.setAttribute("name", datos[i].categoria);
+                      oButton.innerHTML= "Generar PDF..";
+                      oButton.addEventListener("click", funcionGenerarPdfIndicadoresMunicipal);
+
+                      oDiv1.appendChild(oButton);
+                      oDivContenedor.appendChild(oDiv1);
+
+                      oLi3.appendChild(oDivContenedor);
+                      oUlTercero.appendChild(oLi3);
+                      oLi2.appendChild(oUlTercero);
+                    }else if(datos[i].subCategorias[y].name == "SubMenuIndicadoresUsyv"){
+                      var oLi3  = document.createElement('li');  
+
+                      var oDivContenedor  = document.createElement('div'); 
+                      oDivContenedor.classList = "row p-2 m-0";
+                      oDivContenedor.style.backgroundColor = '#DDD4C6';
+
+                      var oDiv1  = document.createElement('div'); 
+                      oDiv1.classList = "col-12 col-md-12";
+
+                      var oButton  = document.createElement('button'); 
+                      oButton.classList = "btn btn-sm btn-primary";                    
+                      oButton.setAttribute("id", datos[i].subCategorias[y].id_sub_categoria);
+                      oButton.setAttribute("name", datos[i].categoria);
+                      oButton.innerHTML= "Generar PDF..";
+                      oButton.addEventListener("click", funcionGenerarPdfIndicadoresUsyv);
+
+                      oDiv1.appendChild(oButton);
+                      oDivContenedor.appendChild(oDiv1);
+
+                      oLi3.appendChild(oDivContenedor);
+                      oUlTercero.appendChild(oLi3);
+                      oLi2.appendChild(oUlTercero);
+                    }
+                  }        
+                  oUlSecundario.appendChild(oLi2);
+                }
+
+
+            
+              oLi1.appendChild(oUlSecundario);
+              oUlPrincipal.appendChild(oLi1);
+
+            }
+          }
+        }
+
+        $('#seccion_tabla_contenido').append(oDivConte);
+      }
+     </script>
+
+    <!-- script popup -->
+    <script type="text/javascript">
+      //se utiliza para crear el html del popup con la informacion de las capas visibles
+      function generarPopUp(response){
+        var info_capa = '';
+        switch(response.capa){
+          case 'culiacan':
+            info_capa+= '<p class="m-0">Municipio Culiacán</p>';
+            info_capa+= '<div class="container">'+
+            '<div class="row"><div class="col">Clave</div><div class="col">'+response.data.dg_mpio+'</div></div>'+
+            '<div class="row"><div class="col">Municipio</div><div class="col">'+response.data.nom_mun+'</div></div>'+
+            '</div>'; 
+            break;
+          case 'urbano':
+            info_capa+= '<p class="m-0">Perímetro Urbano</p>';
+            info_capa+= '<div class="container">'+
+            '<div class="row"><div class="col">Perímetro</div><div class="col">Culiacán</div></div>'+
+            '</div>'; 
+            break;
+          case 'colonias':
+            info_capa+= '<p class="m-0">Colonias</p>';
+            info_capa+= '<div class="container">'+
+            '<div class="row"><div class="col">Municipio</div><div class="col">'+response.data.dg_mpio+'</div></div>'+
+            '<div class="row"><div class="col">Colonia</div><div class="col">'+response.data.nombre+'</div></div>'+
+            '</div>'; 
+            break;
+          case 'cuarteles':
+            info_capa+= '<p class="m-0">Cuarteles</p>';
+            info_capa+= '<div class="container">'+
+            '<div class="row"><div class="col">Municipio</div><div class="col">'+response.data.dg_mpio+'</div></div>'+
+            '<div class="row"><div class="col">Población</div><div class="col">'+response.data.dg_pobl+'</div></div>'+
+            '<div class="row"><div class="col">Cuartel</div><div class="col">'+response.data.dg_ctel+'</div></div>'+
+            '</div>';
+            break;
+          case 'manzanas':
+            info_capa+= '<p class="m-0">Manzanas</p>';
+            info_capa+= '<div class="container">'+
+            '<div class="row"><div class="col">Municipio</div><div class="col">'+response.data.dg_mpio+'</div></div>'+
+            '<div class="row"><div class="col">Población</div><div class="col">'+response.data.dg_pobl+'</div></div>'+
+            '<div class="row"><div class="col">Cuartel</div><div class="col">'+response.data.dg_ctel+'</div></div>'+
+            '<div class="row"><div class="col">Manzana</div><div class="col">'+response.data.dg_manz+'</div></div>'+
+            '<div class="row"><div class="col">Zona</div><div class="col">'+response.data.dg_zona+'</div></div>'+
+            '</div>';
+            break;
+          case 'Culiacan_Join':
+            info_capa+= '<p class="m-0">Predios</p>';
+            info_capa+= '<div class="container">'+
+            '<div class="row"><div class="col">Municipio</div><div class="col">'+response.data.dg_mpio+'</div></div>'+
+            '<div class="row"><div class="col">Población</div><div class="col">'+response.data.dg_pobl+'</div></div>'+
+            '<div class="row"><div class="col">Cuartel</div><div class="col">'+response.data.dg_ctel+'</div></div>'+
+            '<div class="row"><div class="col">Manzana</div><div class="col">'+response.data.dg_manz+'</div></div>'+
+            '<div class="row"><div class="col">Predio</div><div class="col">'+response.data.dg_pred+'</div></div>'+
+            '<div class="row"><div class="col">Unidad</div><div class="col">'+response.data.dg_unid+'</div></div>'+
+            '<div class="row"><div class="col">Propietario</div><div class="col">'+response.data.nom_comp_t+'</div></div>'+
+            '<div class="row"><div class="col">Dirección</div><div class="col">'+response.data.ubi_pred+ ' ' + response.data.nom_col +'</div></div>'+
+            '</div>';      
+            break;
+          case 'construccion':
+            info_capa+= '<p class="m-0">Construcciones</p>';
+            info_capa+= '<div class="container">'+
+            '<div class="row"><div class="col">Municipio</div><div class="col">'+response.data.dg_mpio+'</div></div>'+
+            '<div class="row"><div class="col">Población</div><div class="col">'+response.data.dg_pobl+'</div></div>'+
+            '<div class="row"><div class="col">Cuartel</div><div class="col">'+response.data.dg_ctel+'</div></div>'+
+            '<div class="row"><div class="col">Manzana</div><div class="col">'+response.data.dg_manz+'</div></div>'+
+            '<div class="row"><div class="col">Predio</div><div class="col">'+response.data.dg_pred+'</div></div>'+
+            '<div class="row"><div class="col">Unidad</div><div class="col">'+response.data.dg_unid+'</div></div>'+
+            '<div class="row"><div class="col">Propietario</div><div class="col">'+response.data.nom_comp_t+'</div></div>'+
+            '<div class="row"><div class="col">Dirección</div><div class="col">'+response.data.ubi_pred+ ' ' + response.data.nom_col +'</div></div>'+
+            '<div class="row"><div class="col">Superficie de construcción</div><div class="col">'+response.data.sc+'</div></div>'+
+            '<div class="row"><div class="col">Valor del terreno</div><div class="col">'+response.data.v_terr+'</div></div>'+
+            '</div>';      
+            break;
+          case 'usos_suelo':
+            info_capa+= '<p class="m-0">Usos de Suelo</p>';
+            info_capa+= '<div class="container">'+
+            '<div class="row"><div class="col">Clave</div><div class="col">'+response.data.dg_cat+'</div></div>'+
+            '<div class="row"><div class="col">Uso</div><div class="col">'+response.data.uso+'</div></div>'+
+            '</div>';
+            break;
+          case 'valor_catastral':
+            info_capa+= '<p class="m-0">Predio Valor Catastral</p>';
+            info_capa+= '<div class="container">'+
+            '<div class="row"><div class="col">Clave</div><div class="col">'+response.data.dg_cat+'</div></div>'+
+            '<div class="row"><div class="col">Valor catastral</div><div class="col">'+response.data.val_catast+'</div></div>'+
+            '</div>';
+            break;
+          case 'zona_valor':
+            info_capa+= '<p class="m-0">Zona Valor</p>';
+            info_capa+= '<div class="container">'+
+            '<div class="row"><div class="col">Municipio</div><div class="col">'+response.data.dg_mpio+'</div></div>'+
+            '<div class="row"><div class="col">Población</div><div class="col">'+response.data.dg_pobl+'</div></div>'+
+            '<div class="row"><div class="col">Zona</div><div class="col">'+response.data.dg_zona+'</div></div>'+
+            '<div class="row"><div class="col">Nombre Zona</div><div class="col">'+response.data.desc_zona+'</div></div>'+
+            '<div class="row"><div class="col">Valor</div><div class="col">'+response.data.valor+'</div></div>'+
+            '</div>';
+            break;
+          case 'laboratorio_valores':
+            info_capa+= '<p class="m-0">Laboratorio de Valores</p>';
+            info_capa+= '<div class="container">'+
+            '<div class="row"><div class="col">Clave Zona</div><div class="col">'+response.data.dg_zona+'</div></div>'+
+            '<div class="row"><div class="col">Zona</div><div class="col">'+response.data.desc_zona+'</div></div>'+
+            '<div class="row"><div class="col">Valor</div><div class="col">'+response.data.valor+'</div></div>'+
+            '</div>';
+            break;
+          case 'vias_comunicacion':
+            info_capa+= '<p class="m-0">Vías de Comunicación</p>';
+            info_capa+= '<div class="container">'+
+            '<div class="row"><div class="col">Condición</div><div class="col">'+response.data.condicion+'</div></div>'+
+            '<div class="row"><div class="col">Tipo</div><div class="col">'+response.data.tipovia+'</div></div>'+
+            '<div class="row"><div class="col">Transito</div><div class="col">'+response.data.dere_tran+'</div></div>'+
+            '<div class="row"><div class="col">Nombre Vialidad</div><div class="col">'+response.data.nomvial+'</div></div>'+
+            '</div>';
+            break;
+          case 'hidrografia':
+            info_capa+= '<p class="m-0">Hidrografía</p>';
+            info_capa+= '<div class="container">'+
+            '<div class="row"><div class="col">Condición</div><div class="col">'+response.data.condicion+'</div></div>'+
+            '<div class="row"><div class="col">Entidad</div><div class="col">'+response.data.entidad+'</div></div>'+
+            '</div>';
+            break;
+          case 'uso_suelo_vegetacion':
+            info_capa+= '<p class="m-0">Uso de Suelo y Vegetación</p>';
+            info_capa+= '<div class="container">'+
+            '<div class="row"><div class="col">Tipo de uso</div><div class="col">'+response.data.descripcio+'</div></div>'+
+            '</div>';
+            break;
+          default:
+            break;
+        }
+        return info_capa;
+      }
+    </script>
+
+    <!-- script geoposiiton -->
+    <script type="text/javascript">    
+  
+      //saber la posicion del usuario
+      geolocation.on('change', function () { 
+        $('#progressUbicacion').hide();     
+        $('#accuracy').text(geolocation.getAccuracy() + ' [m]');
+        $('#altitude').text(geolocation.getAltitude() + ' [m]');
+        $('#altitudeAccuracy').text(geolocation.getAltitudeAccuracy() + ' [m]');
+        $('#speed').text(geolocation.getSpeed() + ' [m/s]');
+      });
+
+      geolocation.on('change:position', function () {
+        var coordinates = geolocation.getPosition();
+        if (!positionFeature.getGeometry()) {
+          positionFeature.setGeometry(coordinates ? new ol.geom.Point(coordinates) : null);
+          mapObject.getView().setCenter(coordinates);
+          mapObject.getView().animate({zoom: 19, duration: 250}) 
+        }
+      });
+
+      geolocation.on('change:accuracyGeometry', function () {
+        accuracyFeature.setGeometry(geolocation.getAccuracyGeometry());
+      });
+
+
+      geolocation.on('error', function (error) {  
+        $('#progressUbicacion').hide();        
+        $('#errorUbicacion').text(error.message);
+      });
+
+      $('#checkUbicacion').on('change', function () {    console.log(4555)
+        geolocation.setTracking(this.checked);
+        positionFeature.setGeometry(null);    
+        accuracyFeature.setGeometry(null);  
+        if (!this.checked) {
+          $('#accuracy').text('');
+          $('#altitude').text('');
+          $('#altitudeAccuracy').text('');
+          $('#speed').text('');
+
+          $('#errorUbicacion').text('');
+        }else{
+          $('#progressUbicacion').show();
+        }   
+      });
+    </script>
+
+  </body>
+</html>

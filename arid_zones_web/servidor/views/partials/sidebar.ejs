@@ -1,0 +1,194 @@
+      <nav id="sidebar" style="background-color: #DDD2B9!important; border: #f0f0f0; border-style: groove;">       
+
+        <div id="sidebar_contenedor"> 
+            <div class="row m-0 p-0 h-100" style="width: 55px;">
+
+              <ul id="ulOpcionesMenu" class="p-0  m-0">
+                <button type="button" id="sidebarCollapse1" class="btn btn-info btn_menu" style="background-color: #DDD2B9!important; color: #000; width: 40px;">
+                 <i class="fa fa-bars" aria-hidden="true"></i>
+                </button>
+                <button id="btnTablaContenido" title="Tabla Contenido" type="button" class="btn btn-info btn_menu" style="background-color: #DDD2B9!important; color: #000; width: 40px;">
+                 <i class="fa fa-layer-group" aria-hidden="true"></i>
+                </button>
+                <button id="btnMapaTendencial" title="Mapa Tendencial" type="button" class="btn btn-info btn_menu" style="background-color: #DDD2B9!important; color: #000; width: 40px;">
+                 <i class="fa fa-file" aria-hidden="true"></i>
+                </button>
+                <button id="btnInspeccionarPadron" title="Inspección y Graficación" type="button" class="btn btn-info btn_menu" style="background-color: #DDD2B9!important; color: #000; width: 40px;">
+                 <i class="fas fa-user-check" aria-hidden="true"></i>
+                </button>
+                <button id="btnUbicacion" type="button" class="btn btn-info btn_menu" style="background-color: #DDD2B9!important; color: #000;  width: 40px;">
+                 <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                </button>
+                <button id="btnStreetView" title="StreetView" type="button" class="btn btn-info btn_menu" style="background-color: #DDD2B9!important; color: #000;  width: 40px;">
+                 <i class="fas fa-street-view" aria-hidden="true"></i>
+                </button>
+                <button id="btnExportarPng" title="Exportar Mapa" type="button" class="btn btn-info btn_menu" style="background-color: #DDD2B9!important; color: #000;  width: 40px;">
+                 <i class="fas fa-camera" aria-hidden="true"></i>
+                </button>
+                <hr style="margin: 5px 0px 0px 0px; width: 40px; height: 5px;">
+              </ul>
+
+            </div>
+
+            <div id="sidebar_contenido" class="row">
+
+              <div id="seccion_tabla_contenido" class="w-100 sidebar_seccion"></div>
+
+              <div id="seccion_mapa_tendencial" class="w-100 sidebar_seccion" style="display: none;">
+                <div class="container">
+                  <div class="row m-0 pt-3 pb-2">
+                    <p class="m-0" style="font-weight: 500; color: rgb(0, 0, 0); font-size: 21px;">Mapa Tendencial</p>
+                  </div>
+                  <div id="progressUbicacion" class="progress" style="display: none;">
+                      <div role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%; height: 8px;">  
+                      </div>
+                  </div>
+                  <div class="row m-0 pt-2">
+                    <label style="color: black;">
+                      Ingrese el año a procesar
+                    </label>
+                    <input type="text" class="form-control" placeholder="Año" id="txtAnoTendencia">
+                    <button class="btn btn-sm btn-primary" id="btnTendenciaProcesar">Procesar</button>
+                  </div>
+                </div>
+              </div>
+
+              <div id="seccion_inspeccionar_padron" class="w-100 sidebar_seccion" style="display: none;">
+                  <div class="container">
+                    <div id="inspeccionar_padron">
+                    </div>
+
+                    <div id="herramientas_padron">
+
+                      <div class="row m-0 pt-3 pb-2">
+                        <p class="m-0" style="font-weight: 500; color: rgb(0, 0, 0); font-size: 21px;">Graficación</p>
+                      </div>
+
+                      <div id="progressHerramientas" class="progress" style="display: none;">
+                        <div role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%; height: 8px;">  
+                        </div>
+                      </div>
+
+                      <div class="row m-0 pt-2">
+                        <p class="m-0" style="color: #000; font-weight: 400;">Dibujo</p>  
+                      </div>
+
+                      <div class="row m-0 pt-2">
+                        <button id="btnPunto" class="btn-sm btn-info btn_herramientas" title="Punto" style="font-size: 20px; padding: 0px; width: 40px; margin-right: 5px;">
+                          <i class="fas fa-circle"></i>
+                        </button>
+                        <button id="btnCirculo" class="btn-sm btn-info btn_herramientas" title="Circulo" style="font-size: 20px; padding: 0px; width: 40px; margin-right: 5px;">
+                          <i class="far fa-circle"></i>
+                        </button>
+                        <button id="btnLinea" class="btn-sm btn-info btn_herramientas" title="Linea" style="font-size: 20px; padding: 0px; width: 40px; margin-right: 5px;">
+                          <i class="fas fa-slash"></i>
+                        </button>
+                        <button id="btnPoligono" class="btn-sm btn-info btn_herramientas" title="Poligono" style="font-size: 20px; padding: 0px; width: 40px;">
+                          <i class="fas fa-draw-polygon"></i>
+                        </button>
+                      </div>
+
+                      <div class="row m-0 pt-2">
+                        <p class="m-0" style="color: #000; font-weight: 400;">Medida</p>  
+                      </div>
+
+                      <div class="row m-0 pt-2">
+                        <button id="btnLongitud" class="btn-sm btn-info btn_herramientas" title="Longitud" style="font-size: 20px; padding: 0px; width: 40px; margin-right: 5px;">
+                          <i class="fas fa-ruler-horizontal"></i>
+                        </button>
+                        <button id="btnArea" class="btn-sm btn-info btn_herramientas" title="Área" style="font-size: 20px; padding: 0px; width: 40px; margin-right: 5px;">
+                          <i class="fas fa-square"></i>
+                        </button>
+                      </div>
+
+                      <div class="row m-0 pt-2">
+                        <p class="m-0" style="color: #000; font-weight: 400;">Texto</p>  
+                      </div>
+
+                      <div class="row m-0 pt-2">
+                        <button id="btnTexto" class="btn-sm btn-info btn_herramientas" title="Texto" style="font-size: 20px; padding: 0px; width: 40px;">
+                          <i class="fa fa-font"></i>
+                        </button>
+                      </div>
+
+                      <div id="frmTexto" class="row m-0 pt-2" style="display: none;">
+                        <input id="txtTexto" type="text" placeholder="Ingrese el texto" style="width: 200px;">
+                        <button id="btnTextoAceptar" class="btn-sm btn-info" title="Texto" style="font-size: 15px; padding: 0px;">Aceptar
+                        </button>
+                      </div>
+
+                      <div class="row m-0 pt-2">
+                        <p class="m-0" style="color: #000; font-weight: 400;">Otras</p>  
+                      </div>
+
+                      <div class="row m-0 pt-2">
+
+                        <div class="form-check d-flex align-items-center">
+                          <input type="checkbox" class="form-check-input" style="width: 18px; height: 18px;" id="checkSnap">
+                          <label class="form-check-label" for="checkSnap" style="font-size: 16px; color: #000; margin-right: 5px;">Snap</label>
+                        </div>
+                        <button id="btnLimpiarCapaDibujo" class="btn-sm btn-info btn_herramientas" title="Limpiar Capa Dibujo" style="font-size: 20px; padding: 0px; width: 40px; margin-right: 5px;">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                        <button id="btnDeshacerCambios" class="btn-sm btn-info btn_herramientas" title="Deshacer Cambios" style="font-size: 25px; padding: 0px; width: 40px; margin-right: 5px;">
+                          <i class="fas fa-arrow-alt-circle-left"></i>
+                        </button>
+                      </div>
+
+                    </div>
+
+                    <div id="features_padron">
+                      <div class="row m-0 pt-3 pb-2"><p class="m-0" style="font-weight: 500; color: rgb(0, 0, 0); font-size: 21px;">Figuras</p></div>
+                      <ul id="lista_features_padron" class="list-group" style="color: black;">
+                      </ul>
+                    </div>
+
+                  </div>
+              </div>
+
+              <div id="seccion_ubicacion" class="w-100 sidebar_seccion" style="display: none;">
+                <div class="container">
+                    <div class="row m-0 pt-3 pb-2">
+                      <p class="m-0" style="font-weight: 500; color: rgb(0, 0, 0); font-size: 21px;">Ubicación</p>
+                    </div>
+                    <div id="progressUbicacion" class="progress" style="display: none;">
+                        <div role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%; height: 8px;">  
+                        </div>
+                    </div>
+                    <div class="row m-0 pt-2">
+                      <label for="checkUbicacion" style="color: black;">
+                        Geolocalización
+                        <input id="checkUbicacion" type="checkbox"/>
+                      </label>
+                    </div>
+                    <div class="row m-0 pt-2">
+                      <label style="color: black;">
+                        Precisión de posición: <code id="accuracy"></code><br>
+                        Altitud : <code id="altitude"></code><br>
+                        Precisión de altitud: <code id="altitudeAccuracy"></code><br>
+                        Velocidad : <code id="speed"></code>
+                      </label>
+                    </div>
+                    <div class="row m-0 pt-2">
+                      <p id="errorUbicacion" style="color: red; font-size: 14px;"></p>
+                    </div>
+                  </div>
+              </div>
+
+              <div id="seccion_imprimir" class="w-100 sidebar_seccion" style="display: none;"></div>
+
+              <div id="seccion_busqueda" class="w-100 sidebar_seccion" style="display: none;"></div>
+
+              <div id="seccion_street_view" class="w-100 sidebar_seccion" style="display: none;">
+                  <div class="container">
+                    <div class="row m-0 pt-3 pb-2">
+                      <p class="m-0" style="font-weight: 500; color: rgb(0, 0, 0); font-size: 21px;">StreetView</p>
+                    </div>
+                    <div class="row m-0 pt-2 pb-2"><p class="m-0" style="font-weight: 400; color: rgb(0, 0, 0); font-size: 18px;">Seleccione una coordenada en el mapa para obtener información...</p>
+                    </div>
+                  </div>
+              </div>
+            </div>
+        </div>
+
+      </nav>   
