@@ -1,1 +1,0 @@
-set path=C:\Program Files (x86)\GDAL;C:\Users\Lidia\AppData\Local\Programs\Python\Python37\;C:\Program Files (x86)\GDAL\gdal-data;C:\Windows\System32;
