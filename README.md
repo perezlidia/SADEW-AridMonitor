@@ -75,6 +75,20 @@ Nodejs
 Redis
 [Download](https://redis.io/downloads/).
 
+## Contributors
+
+Lidia Yadira Perez Aguilar.
+lidiaperez@uas.ecu.mx
+
+Ramon Fernando Lopez Osorio.
+ferrlop@uas.edu.mx 
+
+Wenseslao Plata Rocha.
+wenses@uas.edu.mx 
+
+Sergio Alberto Monjadin Armenta.
+sa.monjardin12@info.uas.edu.mx 
+
 ## Contact me
 
 Hello! I'm Lidia Yadira Perez Aguilar, Developer at SADEW. You can contact me through the following means:
