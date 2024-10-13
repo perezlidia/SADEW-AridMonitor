@@ -1,7 +1,8 @@
 # SADEW-AridMonitor
 SADEW is a geotechnical web platform to support spatial decision-making for the monitoring of arid zones in Northwest Mexico, which can show the retrospective, actual, and prospective behavior of these regions, applying a series of computational tools and data integration methods, which can be scalable at regional, national and global levels.
 
-![img1](https://github.com/user-attachments/assets/0e36d294-e8ca-4669-8aae-443f1a03f224)
+![img2](https://github.com/user-attachments/assets/3ab50ddb-0698-4976-b6ca-5b012610d7ed)
+
 
 # Software requirement
 
