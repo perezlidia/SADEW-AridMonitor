@@ -10,7 +10,7 @@ SADEW is a geotechnical web platform to support spatial decision-making for the 
 
 ## Standardized Variable Samples
 
-Within the options, we can analyze the mapping from different variable perspectives, which will give us access to interesting data.
+Among the options, we will be able to analyze the mapping of the diverse standardized variables that are used for modeling and generating arid zones.
 
 ![img4](https://github.com/user-attachments/assets/2b52c1f3-dce6-486c-8b6b-64325818cab3)
 
