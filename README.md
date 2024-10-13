@@ -73,3 +73,8 @@ Nodejs
 Redis
 [Download](https://redis.io/downloads/).
 
+## Contact me
+
+Hello! I'm Lidia Yadira Perez Aguilar, Developer at SADEW. You can contact me through the following means:
+email: lidiaperez@uas.ecu.mx
+
