@@ -1,0 +1,3 @@
+npm install -g bower
+
+--se debe de tener el git instalado

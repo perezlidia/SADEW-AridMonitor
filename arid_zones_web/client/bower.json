@@ -1,0 +1,25 @@
+{
+  "name": "visualizador-catastral-culiacan",
+  "authors": [
+    "Catastro Culiacán <catastro@hotmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "3.4.1",
+    "bootstrap": "4.5.0",
+    "font-awesome": "5.8.1",
+    "bootstrap4-toggle": "3.6.1",
+    "proj4": "2.6.3"
+  }
+}
