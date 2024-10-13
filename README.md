@@ -78,7 +78,7 @@ Redis
 ## Contributors
 
 Lidia Yadira Perez Aguilar.
-lidiaperez@uas.ecu.mx
+lidiaperez@uas.edu.mx
 
 Ramon Fernando Lopez Osorio.
 ferrlop@uas.edu.mx 
@@ -93,5 +93,5 @@ sa.monjardin12@info.uas.edu.mx
 
 Hello! I'm Lidia Yadira Perez Aguilar, Developer at SADEW. You can contact me through the following means:
 
-email: lidiaperez@uas.ecu.mx
+email: lidiaperez@uas.edu.mx
 
