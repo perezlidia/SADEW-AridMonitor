@@ -1,0 +1,32 @@
+{
+  "name": "zonas_aridas_web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "pm2 start index.js --env production -i 0",
+    "stop": "pm2 stop all",
+    "monit": "pm2 monit",
+    "dev": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "1.19.0",
+    "connect-redis": "5.1.0",
+    "ejs": "3.1.6",
+    "express": "4.17.1",
+    "express-session": "1.17.1",
+    "jsreport": "2.11.0",
+    "node-datetime": "2.1.2",
+    "pg": "8.5.1",
+    "pg-escape": "0.2.0",
+    "puppeteer": "5.5.0",
+    "redis": "3.0.2",
+    "request": "2.88.2",
+    "request-promise": "4.2.6"
+  },
+  "devDependencies": {
+    "nodemon": "2.0.6"
+  }
+}
