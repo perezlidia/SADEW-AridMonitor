@@ -14,9 +14,6 @@ Among the options, we will be able to analyze the mapping of the diverse standar
 
 ![img4](https://github.com/user-attachments/assets/2b52c1f3-dce6-486c-8b6b-64325818cab3)
 
-## How does it work?
-
-![Pricing Table](https://github.com/user-attachments/assets/2cefa04e-153b-4438-83ad-ab37c7f48061)
 
 ## Software requirement
 
