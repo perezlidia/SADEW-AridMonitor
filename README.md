@@ -28,7 +28,6 @@ QGIS:
 Postgres10
 [Download](https://www.postgresql.org/download/).
 
-
 Python 2
 [Download](https://www.python.org/downloads/release/python-272/).
 
@@ -74,6 +73,28 @@ Nodejs
 Redis
 [Download](https://redis.io/downloads/).
 
+
+> [!WARNING]
+> Dependencias dentro del proyecto.
+
+Instalar PM2 globalmente en el sistema.
+```
+npm install -g pm2
+```
+Dentro de la consola del del proyecto.
+```
+npm init
+npm install ol
+npm install --save-dev parcel-bundler
+npm run build
+```
+Para Excell
+```
+python -m pip install xlrd==2.0.1 #excel
+python -m pip install xlwt==1.3.0 #excel
+python -m pip install selenium==3.141.0
+```
+
 ## Contributors
 
 Lidia Yadira Perez Aguilar.
@@ -92,5 +113,5 @@ sa.monjardin12@info.uas.edu.mx
 
 Hello! I'm Lidia Yadira Perez Aguilar, Developer at SADEW. You can contact me through the following means:
 
-email: lidiaperez@uas.edu.mx
+email: [lidiaperez@uas.edu.mx](lidiaperez@uas.edu.mx)
 
