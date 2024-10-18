@@ -29,7 +29,7 @@ This project contains the data necessary to reproduce the Geo visualizer. The pr
 
 ## Software requirement
 
-Hardware required for full system installation: Windows PC; Software requirements: QGIS 2.8 or higher, Postgres10, Python 2., Python 3, Terrset, ArcGIS 9.3 or higher, Geoserver; Complements: Extension de Seleniun IDE, NodeJS,  PostGIS 2.5, ArcPy, PyQGIS, GDAL, Idrisi32, Apache, Geoserver-rest, Nodejs, Redis, JavaScript, Bower, Bootstrap
+Hardware required for full system installation: Windows PC; Software requirements: [QGIS 2.8]((https://qgis.org/download/)) or higher, [Postgres10]((https://www.postgresql.org/download/)) , Python 2., Python 3, Terrset, ArcGIS 9.3 or higher, Geoserver; Complements: Extension de Seleniun IDE, NodeJS,  PostGIS 2.5, ArcPy, PyQGIS, GDAL, Idrisi32, Apache, Geoserver-rest, Nodejs, Redis, JavaScript, Bower, Bootstrap
 
 > [!WARNING]
 > It may be necessary to have the exact same version stipulated in the description.
