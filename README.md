@@ -3,7 +3,10 @@
 > SADEW (for its acronym in Spanish: Sistema de Apoyo a la toma de Decisiones Espacial Web).
 > 
 Aridity, a climatic phenomenon, affects both the environment and society by causing water scarcity and hindering the development of vegetation through the lack of moisture in the soil and air.
-The aridity index is the most common method for classifying arid regions, which calculates the relationship between precipitation and evapotranspiration. 
+> 
+The aridity index is the most common method for classifying arid regions, which calculates the relationship between precipitation and evapotranspiration. As the index decreases, the region becomes more arid, and we can classify them as:
+>
+Hyper-arid: These regions have an annual precipitation of less than 100 mm. They are the driest regions on the planet, with little or no vegetation and extreme water scarcity.
 
 
 
