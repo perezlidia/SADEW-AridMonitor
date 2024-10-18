@@ -25,8 +25,6 @@ The development of SADEW required the integration of a series of computational a
 
 This project contains the data necessary to reproduce the Geo visualizer. The project implements the Geo visualizer in Python. The input datasets for processing are Temperature, which is obtained from USGS Earth Explorer (https://earthexplorer.usgs.gov/), Precipitation, Potential Evapotranspiration, Humidity from TerraClimate (https://app.climateengine.org/climateEngine), Slopes, Aspect generated from digital elevation model by SRTM (https://srtm.csi.cgiar.org). 
 
-SADEW is a geotechnical web platform to support spatial decision-making for the monitoring of arid zones in Northwest Mexico, which can show the retrospective, actual, and prospective behavior of these regions, applying a series of computational tools and data integration methods, which can be scalable at regional, national and global levels.
-
 >To develop this project, [specialized software](https://github.com/perezlidia/SADEW-AridMonitor?tab=readme-ov-file#software-requirement) was necessary.
 
 ## Software requirement
@@ -37,16 +35,7 @@ Hardware required for full system installation: Windows PC; Software requirement
 > It may be necessary to have the exact same version stipulated in the description.
 
 QGIS:
-[Download](https://qgis.org/download/).
-
-Postgres10
-[Download](https://www.postgresql.org/download/).
-
-Python 2
-[Download](https://www.python.org/downloads/release/python-272/).
-
-Python 3
-[Download](https://www.python.org/downloads/).
+[Download](https://qgis.org/download/). Postgres10 [Download](https://www.postgresql.org/download/). Python 2 [Download](https://www.python.org/downloads/release/python-272/). Python 3 [Download](https://www.python.org/downloads/).
 
 Terrset
 [Download](https://clarklabs.org/download/).
@@ -139,6 +128,7 @@ Among the options, we will be able to analyze the mapping of the diverse standar
 
 ![img4](https://github.com/user-attachments/assets/2b52c1f3-dce6-486c-8b6b-64325818cab3)
 
+SADEW is a geotechnical web platform to support spatial decision-making for the monitoring of arid zones in Northwest Mexico, which can show the retrospective, actual, and prospective behavior of these regions, applying a series of computational tools and data integration methods, which can be scalable at regional, national and global levels.
 ## Contributors
 
 Lidia Yadira Perez Aguilar.
