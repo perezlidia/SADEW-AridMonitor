@@ -23,7 +23,7 @@ This project is an integral part of an Environmental Monitoring Program that is 
 
 The development of SADEW required the integration of a series of computational and technical tools to identify arid regions in the past, present, and future through a web geoportal such as a web server, map server, database server, programming language, geographic information systems libraries, and web development tools, based mainly on client-server technology. Besides requiring an external data source, such as satellite images from remote sensors.
 
-This project contains the data necessary to reproduce the Geo visualizer. The project implements the Geo visualizer in Python. The input datasets for processing are Temperature, which is obtained from USGS Earth Explorer (https://earthexplorer.usgs.gov/), Precipitation, Potential Evapotranspiration, Humidity from TerraClimate (https://app.climateengine.org/climateEngine), Slopes, Aspect generated from digital elevation model by SRTM (https://srtm.csi.cgiar.org). 
+This project contains the data necessary to reproduce the Geo visualizer. The project implements the Geo visualizer in Python. The input datasets for processing are Temperature, which is obtained from USGS Earth Explorer (https://earthexplorer.usgs.gov/), Precipitation, Potential Evapotranspiration, Humidity from TerraClimate (https://app.climateengine.org/climateEngine), Slopes, Aspect generated from digital elevation model by [SRTM]([url](https://srtm.csi.cgiar.org)) SRTM (https://srtm.csi.cgiar.org). 
 
 >To develop this project, [specialized software](https://github.com/perezlidia/SADEW-AridMonitor?tab=readme-ov-file#software-requirement) was necessary.
 
