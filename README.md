@@ -1,6 +1,8 @@
 # SADEW-AridMonitor
 > [!NOTE]
 > SADEW (for its acronym in Spanish: Sistema de Apoyo a la toma de Decisiones Espacial Web).
+>
+> SADEW is a geotechnical web platform to support spatial decision-making for the monitoring of arid zones in Northwest Mexico, which can show the retrospective, actual, and prospective behavior of these regions, applying a series of computational tools and data integration methods, which can be scalable at regional, national and global levels.
 > 
 Aridity, a climatic phenomenon, affects both the environment and society by causing water scarcity and hindering the development of vegetation through the lack of moisture in the soil and air.
 The aridity index is the most common method for classifying arid regions, which calculates the relationship between precipitation and evapotranspiration. As the index decreases, the region becomes more arid, and we can classify them as:
@@ -81,7 +83,7 @@ Among the options, we will be able to analyze the mapping of the diverse standar
 
 ![img4](https://github.com/user-attachments/assets/2b52c1f3-dce6-486c-8b6b-64325818cab3)
 
-SADEW is a geotechnical web platform to support spatial decision-making for the monitoring of arid zones in Northwest Mexico, which can show the retrospective, actual, and prospective behavior of these regions, applying a series of computational tools and data integration methods, which can be scalable at regional, national and global levels.
+
 ## Contributors
 
 Lidia Yadira Perez Aguilar.
