@@ -23,7 +23,7 @@ This project is an integral part of an Environmental Monitoring Program that is 
 
 The development of SADEW required the integration of a series of computational and technical tools to identify arid regions in the past, present, and future through a web geoportal such as a web server, map server, database server, programming language, geographic information systems libraries, and web development tools, based mainly on client-server technology. Besides requiring an external data source, such as satellite images from remote sensors.
 
-
+This project contains the data necessary to reproduce the Geo visualizer. The project implements the Geo visualizer in Python. The input datasets for processing are Temperature, which is obtained from USGS Earth Explorer (https://earthexplorer.usgs.gov/), Precipitation, Potential Evapotranspiration, Humidity from TerraClimate (https://app.climateengine.org/climateEngine), Slopes, Aspect generated from digital elevation model by SRTM (https://srtm.csi.cgiar.org). 
 
 SADEW is a geotechnical web platform to support spatial decision-making for the monitoring of arid zones in Northwest Mexico, which can show the retrospective, actual, and prospective behavior of these regions, applying a series of computational tools and data integration methods, which can be scalable at regional, national and global levels.
 
