@@ -7,9 +7,13 @@ Aridity, a climatic phenomenon, affects both the environment and society by caus
 The aridity index is the most common method for classifying arid regions, which calculates the relationship between precipitation and evapotranspiration. As the index decreases, the region becomes more arid, and we can classify them as:
 >
 ● Hyper-arid: These regions have an annual precipitation of less than 100 mm. They are the driest regions on the planet, with little or no vegetation and extreme water scarcity.
+
 ● Arid: Their annual precipitation is between 100 and 250 mm. They have very little vegetation, and their climate is dry during most of the year.
+
 ● Semi-arid: They receive an annual rainfall between 250 and 500 mm. These regions receive more rain than arid areas, allowing limited vegetation, such as grasslands and shrubs. 
+
 ● Dry sub-humid: They receive an annual precipitation between 500 and 700 mm. These regions have a more humid climate than semi-arid areas but still experience periodic droughts. 
+
 ● Humid: These are regions that receive more than 700 mm annual precipitation, where there is greater humidity. Therefore, the soil types are suitable for denser and more diverse vegetation.
 
 
