@@ -1,6 +1,7 @@
 # SADEW-AridMonitor
 > [!NOTE]
 > SADEW (for its acronym in Spanish: Sistema de Apoyo a la toma de Decisiones Espacial Web).
+> 
 Aridity, a climatic phenomenon, affects both the environment and society by causing water scarcity and hindering the development of vegetation through the lack of moisture in the soil and air.
 The aridity index is the most common method for classifying arid regions, which calculates the relationship between precipitation and evapotranspiration. 
 
