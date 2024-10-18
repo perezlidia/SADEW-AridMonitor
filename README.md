@@ -6,15 +6,6 @@ SADEW is a geotechnical web platform to support spatial decision-making for the 
 
 >To develop this project, [specialized software](https://github.com/perezlidia/SADEW-AridMonitor?tab=readme-ov-file#software-requirement) was necessary.
 
-![img3](https://github.com/user-attachments/assets/c492bd7c-0070-405b-8938-9c624403d28d)
-
-## Standardized Variable Samples
-
-Among the options, we will be able to analyze the mapping of the diverse standardized variables that are used for modeling and generating arid zones.
-
-![img4](https://github.com/user-attachments/assets/2b52c1f3-dce6-486c-8b6b-64325818cab3)
-
-
 ## Software requirement
 
 Hardware required for full system installation: Windows PC; Software requirements: QGIS 2.8 or higher, Postgres10, Python 2., Python 3, Terrset, ArcGIS 9.3 or higher, Geoserver; Complements: Extension de Seleniun IDE, NodeJS,  PostGIS 2.5, ArcPy, PyQGIS, GDAL, Idrisi32, Apache, Geoserver-rest, Nodejs, Redis, JavaScript, Bower, Bootstrap
@@ -75,25 +66,55 @@ Redis
 
 
 > [!WARNING]
-> Dependencias dentro del proyecto.
+> Project Dependencies.
 
 Instalar PM2 globalmente en el sistema.
+
 ```
 npm install -g pm2
 ```
+
 Dentro de la consola del del proyecto.
+
 ```
 npm init
+```
+
+```
 npm install ol
+```
+
+```
 npm install --save-dev parcel-bundler
+```
+
+```
 npm run build
 ```
+
 Para Excell
+
 ```
 python -m pip install xlrd==2.0.1 #excel
+```
+
+```
 python -m pip install xlwt==1.3.0 #excel
+```
+
+```
 python -m pip install selenium==3.141.0
 ```
+
+## Page Visualization
+
+![img3](https://github.com/user-attachments/assets/c492bd7c-0070-405b-8938-9c624403d28d)
+
+## Standardized Variable Samples
+
+Among the options, we will be able to analyze the mapping of the diverse standardized variables that are used for modeling and generating arid zones.
+
+![img4](https://github.com/user-attachments/assets/2b52c1f3-dce6-486c-8b6b-64325818cab3)
 
 ## Contributors
 
