@@ -28,57 +28,10 @@ This project contains the data necessary to reproduce the Geo visualizer. The pr
 >To develop this project, [specialized software](https://github.com/perezlidia/SADEW-AridMonitor?tab=readme-ov-file#software-requirement) was necessary.
 
 ## Software requirement
-
-Hardware required for full system installation: Windows PC; Software requirements: [QGIS 2.8]((https://qgis.org/download/)) or higher, [Postgres10]((https://www.postgresql.org/download/)) , Python 2., Python 3, Terrset, ArcGIS 9.3 or higher, Geoserver; Complements: Extension de Seleniun IDE, NodeJS,  PostGIS 2.5, ArcPy, PyQGIS, GDAL, Idrisi32, Apache, Geoserver-rest, Nodejs, Redis, JavaScript, Bower, Bootstrap
-
 > [!WARNING]
 > It may be necessary to have the exact same version stipulated in the description.
-
-QGIS:
-[Download](https://qgis.org/download/). Postgres10 [Download](https://www.postgresql.org/download/). Python 2 [Download](https://www.python.org/downloads/release/python-272/). Python 3 [Download](https://www.python.org/downloads/).
-
-Terrset
-[Download](https://clarklabs.org/download/).
-
-ArcGIS 9.3
-[Download](https://arcgis.software.informer.com/9.3/).
-
-Geoserver
-[Download](https://geoserver.org/download/).
-
-Seleniun IDE
-[Download](https://chromewebstore.google.com/detail/selenium-ide/mooikfkahbdckldjjndioackbalphokd?hl=es).
-
-NodeJS
-[Download](https://nodejs.org/en/download/package-manager).
-
-PostGIS 2.5
-[Download](https://postgis.net/2018/09/PostGIS-2.5.0/).
-
-ArcPy
-[Download](https://pro.arcgis.com/es/pro-app/latest/arcpy/get-started/installing-arcpy.htm).
-
-PyQGIS
-[Download](https://qgis.org/pyqgis/master/).
-
-GDAL
-[Download](https://gdal.org/en/latest/download.html).
-
-Idrisi32
-[Download](https://idrisi32.software.informer.com).
-
-Apache
-[Download](https://httpd.apache.org/download.cgi).
-
-Nodejs
-[Download](https://nodejs.org/en/download/package-manager).
-
-Redis
-[Download](https://redis.io/downloads/).
-
-
-> [!WARNING]
-> Project Dependencies.
+> 
+Hardware required for full system installation: Windows PC; Software requirements: [QGIS 2.8](https://qgis.org/download/) or higher, [Postgres10](https://www.postgresql.org/download/), . [Python 2](https://www.python.org/downloads/release/python-272/), [Python 3](https://www.python.org/downloads/), [Terrset](https://clarklabs.org/download/),  [ArcGIS 9.3](https://arcgis.software.informer.com/9.3/) or higher, [Geoserver](https://geoserver.org/download/); Complements: Extension de [Seleniun IDE](https://chromewebstore.google.com/detail/selenium-ide/mooikfkahbdckldjjndioackbalphokd?hl=es), [NodeJS](https://nodejs.org/en/download/package-manager), [PostGIS 2.5](https://postgis.net/2018/09/PostGIS-2.5.0/), [ArcPy](https://pro.arcgis.com/es/pro-app/latest/arcpy/get-started/installing-arcpy.htm), [PyQGIS](https://qgis.org/pyqgis/master/), [GDAL](https://gdal.org/en/latest/download.html), [Idrisi32](https://idrisi32.software.informer.com), [Apache](https://httpd.apache.org/download.cgi), [Geoserver-rest](https://docs.geoserver.org/stable/en/user/rest/), [Redis](https://redis.io/downloads/)), JavaScript, [Bower](https://bower.io/), [Bootstrap](https://getbootstrap.com/)
 
 Instalar PM2 globalmente en el sistema.
 
