@@ -46,9 +46,18 @@ Installing all dependencies
 It will install everything the project needs, in the node_modules folder, creating it if it's not existing already
 > 
 ```
-npm install -g pm2
+npm install
+```
+Updating packages
+
+Updating is also made easy, by running
+```
+npm update
 ```
 
+```
+npm install -g pm2
+```
 Dentro de la consola del del proyecto.
 
 ```
