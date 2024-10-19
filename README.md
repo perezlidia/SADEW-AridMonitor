@@ -43,6 +43,8 @@ Scripts can be found in the scripts directory.
 
 The first thing to do is to create a main folder in the root directory, which will contain all the project files
 >
+**Essential npm Commands**
+
 **Installing all dependencies**
 > 
 In the folder that was created, npm should be executed. 
@@ -51,6 +53,37 @@ In the folder that was created, npm should be executed.
 ```
 npm install
 ```
+To uninstall npm packages use the following command:
+```
+Uninstalling npm
+```
+
+The init command is used to initialize a project. When you run this command, it creates a package.json file. When you run npm init, you will be asked to provide the project name, license type, version, and other data.
+```
+npm start
+```
+To update an npm ar package to its latest version use the following command
+```
+npm update
+```
+When you want to stop and restart a project the following command is used:
+```
+npm restart
+```
+When you want to start a package when needed use:
+```
+npm start
+```
+When you want to stop a package from running use:
+```
+npm stop
+```
+When you want to see the current version of npm installed on your computer run:
+```
+npm version
+```
+
+
 **Updating packages**
 
 Updating is also made easy, by running. npm will check all packages for a newer version
@@ -63,15 +96,19 @@ The package.json file supports a format for specifying command line tasks that c
 ```
 npm run dev
 ```
+**npm Managing Applications**
+```
+pm2 stop     
+pm2 restart  
+pm2 delete
+```
 
-**Replace project folder**
-
-Once the main folder is created, the next step is to replace all the files in the arid_zones_web folder that are available in this repository and the arid_zones_processing folder is in the same path as the arid_zones_web folder
-
+**Production process manager**
+Managing apps is straightforward:
+pm2 is a tool that manages processes for Node.js applications. Its main function is to ensure that applications are always active, reload them without interrupting their operation, and help with common system administration tasks.
 ```
 npm install -g pm2
 ```
-Dentro de la consola del del proyecto.
 
 ```
 npm init
@@ -88,6 +125,10 @@ npm install --save-dev parcel-bundler
 ```
 npm run build
 ```
+
+**Replace project folder**
+
+Once the main folder is created, the next step is to replace all the files in the arid_zones_web folder that are available in this repository and the arid_zones_processing folder is in the same path as the arid_zones_web folder
 
 Para Excell
 
