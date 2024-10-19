@@ -36,7 +36,9 @@ This project contains the data necessary to reproduce the Geo visualizer. The pr
 Hardware required for full system installation: Windows PC; Software requirements: [QGIS 2.8](https://qgis.org/download/) or higher, [Postgres10](https://www.postgresql.org/download/), . [Python 2](https://www.python.org/downloads/release/python-272/), [Python 3](https://www.python.org/downloads/), [Terrset](https://clarklabs.org/download/),  [ArcGIS 9.3](https://arcgis.software.informer.com/9.3/) or higher, [Geoserver](https://geoserver.org/download/); Complements: Extension de [Seleniun IDE](https://chromewebstore.google.com/detail/selenium-ide/mooikfkahbdckldjjndioackbalphokd?hl=es), [NodeJS](https://nodejs.org/en/download/package-manager), [PostGIS 2.5](https://postgis.net/2018/09/PostGIS-2.5.0/), [ArcPy](https://pro.arcgis.com/es/pro-app/latest/arcpy/get-started/installing-arcpy.htm), [PyQGIS](https://qgis.org/pyqgis/master/), [GDAL](https://gdal.org/en/latest/download.html), [Idrisi32](https://idrisi32.software.informer.com), [Apache](https://httpd.apache.org/download.cgi), [Geoserver-rest](https://docs.geoserver.org/stable/en/user/rest/), [Redis](https://redis.io/downloads/)), JavaScript, [Bower](https://bower.io/), [Bootstrap](https://getbootstrap.com/)
 
 Scripts can be found in the scripts directory.
-
+> [!WARNING]
+Sadew runs only on the Windows operating system, as some of the programs it uses are not compatible with other operating systems
+> 
 ## Installing packages
 
 **Create the main folder of the project**
@@ -47,32 +49,25 @@ The first thing to do is to create a main folder in the root directory, which wi
 
 **Installing all dependencies**
 > 
-In the folder that was created, npm should be executed. 
-**npm** manages downloads of dependencies of project. If a project has a package.json file, by running it will install everything the project needs, in the node_modules folder, creating it if it's not existing already
+In the folder that was created, npm should be executed npm manages downloads of dependencies of project. If a project has a package.json file, by running it will install everything the project needs, in the node_modules folder, creating it if it's not existing already.
+>
+> To run the following code on command lines in the Windows command prompt
 > 
 ```
 npm install
 ```
-To uninstall npm packages use the following command:
-```
-Uninstalling npm
-```
-
 The init command is used to initialize a project. When you run this command, it creates a package.json file. When you run npm init, you will be asked to provide the project name, license type, version, and other data.
 ```
-npm start
-```
-To update an npm ar package to its latest version use the following command
-```
-npm update
-```
-When you want to stop and restart a project the following command is used:
-```
-npm restart
+npm init
 ```
 When you want to start a package when needed use:
 ```
 npm start
+```
+
+When you want to stop and restart a project the following command is used:
+```
+npm restart
 ```
 When you want to stop a package from running use:
 ```
@@ -82,68 +77,48 @@ When you want to see the current version of npm installed on your computer run:
 ```
 npm version
 ```
-
-
-**Updating packages**
-
-Updating is also made easy, by running. npm will check all packages for a newer version
+To update an npm ar package to its latest version use the following command
 ```
 npm update
 ```
-**Running Tasks**
-The package.json file supports a format for specifying command line tasks that can be run
 
+**Running Tasks**
+
+The package.json file supports a format for specifying command line tasks that can be run. 
 ```
 npm run dev
 ```
-**npm Managing Applications**
-```
-pm2 stop     
-pm2 restart  
-pm2 delete
-```
-
 **Production process manager**
+
 Managing apps is straightforward:
 pm2 is a tool that manages processes for Node.js applications. Its main function is to ensure that applications are always active, reload them without interrupting their operation, and help with common system administration tasks.
 ```
 npm install -g pm2
 ```
 
-```
-npm init
-```
-
-```
-npm install ol
-```
-
-```
-npm install --save-dev parcel-bundler
-```
-
-```
-npm run build
-```
-
 **Replace project folder**
 
 Once the main folder is created, the next step is to replace all the files in the arid_zones_web folder that are available in this repository and the arid_zones_processing folder is in the same path as the arid_zones_web folder
 
-Para Excell
-
+**Excel packages**
+The project uses two Excel files to capture the completion of each phase and process, so it is necessary to install the Excel packages.
 ```
 python -m pip install xlrd==2.0.1 #excel
 ```
-
 ```
 python -m pip install xlwt==1.3.0 #excel
 ```
-
 ```
 python -m pip install selenium==3.141.0
 ```
+## Database store
+In the utilerias folder of this repository, you will find the database backup to be restored in postgresSQL with the postgis spatial extension previously installed in your manager.
 
+## Map server management
+In the utilities folder of this repository, you will find the backup of all the map styles that will be displayed in the web geoviewer, you only have to replace the geoserver folder that is in the server installation path, for example:
+```
+C:\ProgramData\Boundless\OpenGeo\geoserver
+```
 ## Page Visualization
 
 ![img3](https://github.com/user-attachments/assets/c492bd7c-0070-405b-8938-9c624403d28d)
