@@ -7,15 +7,15 @@
 Aridity, a climatic phenomenon, affects both the environment and society by causing water scarcity and hindering the development of vegetation through the lack of moisture in the soil and air.
 The aridity index is the most common method for classifying arid regions, which calculates the relationship between precipitation and evapotranspiration. As the index decreases, the region becomes more arid, and we can classify them as:
 >
-● Hyper-arid: These regions have an annual precipitation of less than 100 mm. They are the driest regions on the planet, with little or no vegetation and extreme water scarcity.
+● **Hyper-arid:** These regions have an annual precipitation of less than 100 mm. They are the driest regions on the planet, with little or no vegetation and extreme water scarcity.
 
-● Arid: Their annual precipitation is between 100 and 250 mm. They have very little vegetation, and their climate is dry during most of the year.
+● **Arid:** Their annual precipitation is between 100 and 250 mm. They have very little vegetation, and their climate is dry during most of the year.
 
-● Semi-arid: They receive an annual rainfall between 250 and 500 mm. These regions receive more rain than arid areas, allowing limited vegetation, such as grasslands and shrubs. 
+● **Semi-arid:** They receive an annual rainfall between 250 and 500 mm. These regions receive more rain than arid areas, allowing limited vegetation, such as grasslands and shrubs. 
 
-● Dry sub-humid: They receive an annual precipitation between 500 and 700 mm. These regions have a more humid climate than semi-arid areas but still experience periodic droughts. 
+● **Dry sub-humid:** They receive an annual precipitation between 500 and 700 mm. These regions have a more humid climate than semi-arid areas but still experience periodic droughts. 
 
-● Humid: These are regions that receive more than 700 mm annual precipitation, where there is greater humidity. Therefore, the soil types are suitable for denser and more diverse vegetation.
+● **Humid:** These are regions that receive more than 700 mm annual precipitation, where there is greater humidity. Therefore, the soil types are suitable for denser and more diverse vegetation.
 
 In Mexico, more than half of the territory is covered by arid and semi-arid regions and these conditions result from various environmental factors (low precipitation, high temperatures and evaporation, climate change, soil degradation, extreme weather phenomena) and human actions (deforestation, overexploitation of water resources, intensive agriculture and poor agricultural practices, urban sprawl, fuel burning, water and soil pollution).
 
