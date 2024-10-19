@@ -39,6 +39,8 @@ Scripts can be found in the scripts directory.
 
 ## Installing packages
 
+**Create the main folder of the project**
+The first thing to do is to create a main folder in the root directory, which will contain all the project files
 npm manages downloads of dependencies of your project.
 >
 **Installing all dependencies**
@@ -55,11 +57,13 @@ Updating is also made easy, by running. npm will check all packages for a newer 
 npm update
 ```
 **Running Tasks**
-The package.json file supports a format for specifying command line tasks that can be run by using
+The package.json file supports a format for specifying command line tasks that can be run
+
 ```
 npm run dev
 ```
 
+**Replace project folder**
 
 ```
 npm install -g pm2
