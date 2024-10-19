@@ -43,17 +43,23 @@ npm manages downloads of dependencies of your project.
 >
 **Installing all dependencies**
 > 
-It will install everything the project needs, in the node_modules folder, creating it if it's not existing already
+If a project has a package.json file, by running it will install everything the project needs, in the node_modules folder, creating it if it's not existing already
 > 
 ```
 npm install
 ```
 **Updating packages**
 
-Updating is also made easy, by running
+Updating is also made easy, by running. npm will check all packages for a newer version
 ```
 npm update
 ```
+**Running Tasks**
+The package.json file supports a format for specifying command line tasks that can be run by using
+```
+npm run dev
+```
+
 
 ```
 npm install -g pm2
