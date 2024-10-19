@@ -1,0 +1,15 @@
+<layer>
+  <name>var_humedad_2001</name>
+  <id>LayerInfoImpl-4f9c3a5e:19282b5c827:-7770</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--7f256af1:17fcce0c790:-7fe2</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-4f9c3a5e:19282b5c827:-7771</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

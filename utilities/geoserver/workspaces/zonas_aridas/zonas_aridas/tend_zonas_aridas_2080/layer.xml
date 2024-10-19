@@ -1,0 +1,15 @@
+<layer>
+  <name>tend_zonas_aridas_2080</name>
+  <id>LayerInfoImpl-4f9c3a5e:19282b5c827:-793e</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--7f256af1:17fcce0c790:-7fa0</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-4f9c3a5e:19282b5c827:-793f</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

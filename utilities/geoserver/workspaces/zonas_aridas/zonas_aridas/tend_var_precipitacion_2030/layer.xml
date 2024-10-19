@@ -1,0 +1,15 @@
+<layer>
+  <name>tend_var_precipitacion_2030</name>
+  <id>LayerInfoImpl-668cbb38:1807bc08226:-7fe9</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--570ae188:124761b8d78:-7fe0</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-668cbb38:1807bc08226:-7fea</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

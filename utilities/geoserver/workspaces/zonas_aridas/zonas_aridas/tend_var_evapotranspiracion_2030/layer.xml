@@ -1,0 +1,15 @@
+<layer>
+  <name>tend_var_evapotranspiracion_2030</name>
+  <id>LayerInfoImpl-668cbb38:1807bc08226:-7fe5</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--7f256af1:17fcce0c790:-7fe3</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-668cbb38:1807bc08226:-7fe6</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

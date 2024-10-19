@@ -1,0 +1,15 @@
+<layer>
+  <name>zonas_aridas_2020</name>
+  <id>LayerInfoImpl--5cf0adf2:180690d0a6f:-7f87</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--7f256af1:17fcce0c790:-7fa0</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl--5cf0adf2:180690d0a6f:-7f88</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>

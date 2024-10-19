@@ -1,0 +1,15 @@
+<layer>
+  <name>tend_var_indicedevegetacion_2060</name>
+  <id>LayerInfoImpl-4f9c3a5e:19282b5c827:-77e0</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--7f256af1:17fcce0c790:-7fe4</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-4f9c3a5e:19282b5c827:-77e1</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>
