@@ -40,12 +40,12 @@ Scripts can be found in the scripts directory.
 ## Installing packages
 
 **Create the main folder of the project**
+
 The first thing to do is to create a main folder in the root directory, which will contain all the project files
-npm manages downloads of dependencies of your project.
 >
 **Installing all dependencies**
 > 
-If a project has a package.json file, by running it will install everything the project needs, in the node_modules folder, creating it if it's not existing already
+In the folder that was created, npm should be executed. **npm** manages downloads of dependencies of project. If a project has a package.json file, by running it will install everything the project needs, in the node_modules folder, creating it if it's not existing already
 > 
 ```
 npm install
