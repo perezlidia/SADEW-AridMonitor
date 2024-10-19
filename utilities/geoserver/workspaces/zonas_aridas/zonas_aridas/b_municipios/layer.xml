@@ -1,0 +1,15 @@
+<layer>
+  <name>b_municipios</name>
+  <id>LayerInfoImpl-22c0b76a:1807876ac25:-7ea1</id>
+  <type>VECTOR</type>
+  <defaultStyle>
+    <id>StyleInfoImpl--5cf0adf2:180690d0a6f:-7f6b</id>
+  </defaultStyle>
+  <resource class="featureType">
+    <id>FeatureTypeInfoImpl-22c0b76a:1807876ac25:-7ea2</id>
+  </resource>
+  <attribution>
+    <logoWidth>0</logoWidth>
+    <logoHeight>0</logoHeight>
+  </attribution>
+</layer>
