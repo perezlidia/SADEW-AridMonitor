@@ -21,7 +21,7 @@ In Mexico, more than half of the territory is covered by arid and semi-arid regi
 
 We developed a Web Spatial Decision Support System (SADEW) that focuses on monitoring arid regions of Northwest Mexico at the Administrative Hydrological level. The aim of this system is to evaluate, observe, and analyze the environmental conditions of arid and semi-arid zones, providing detailed and timely data on the state of aridity. This tool is key to supporting the sustainable management of these ecosystems, providing valuable information that facilitates decision-making and strategic planning in the conservation and management of natural resources. 
 
-This project is an integral part of an Environmental Monitoring Program that is being developed in collaboration with researchers from the Universidad Autónoma de Sinaloa with support from the Consejo Nacional de Humanidades, Ciencias y Tecnologías (CONAHCYT).
+This project is an integral part of an Environmental Monitoring Program that is being developed in collaboration with researchers from the Universidad Autónoma de Sinaloa.
 
 The development of SADEW required the integration of a series of computational and technical tools to identify arid regions in the past, present, and future through a web geoportal such as a web server, map server, database server, programming language, geographic information systems libraries, and web development tools, based mainly on client-server technology. Besides requiring an external data source, such as satellite images from remote sensors.
 
