@@ -45,7 +45,8 @@ The first thing to do is to create a main folder in the root directory, which wi
 >
 **Installing all dependencies**
 > 
-In the folder that was created, npm should be executed. **npm** manages downloads of dependencies of project. If a project has a package.json file, by running it will install everything the project needs, in the node_modules folder, creating it if it's not existing already
+In the folder that was created, npm should be executed. 
+**npm** manages downloads of dependencies of project. If a project has a package.json file, by running it will install everything the project needs, in the node_modules folder, creating it if it's not existing already
 > 
 ```
 npm install
@@ -64,6 +65,8 @@ npm run dev
 ```
 
 **Replace project folder**
+
+Once the main folder is created, the next step is to replace all the files in the arid_zones_web folder that are available in this repository and the arid_zones_processing folder is in the same path as the arid_zones_web folder
 
 ```
 npm install -g pm2
