@@ -40,9 +40,11 @@ Scripts can be found in the scripts directory.
 ## Installing packages
 
 npm manages downloads of dependencies of your project.
+>
 Installing all dependencies
+> 
 It will install everything the project needs, in the node_modules folder, creating it if it's not existing already
-
+> 
 ```
 npm install -g pm2
 ```
