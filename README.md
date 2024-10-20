@@ -1,4 +1,4 @@
-# SADEW-AridMonitor
+![image](https://github.com/user-attachments/assets/3b387dd9-f141-49ae-b20e-c7e56e8f1a52)# SADEW-AridMonitor
 > [!NOTE]
 > SADEW (for its acronym in Spanish: Sistema de Apoyo a la toma de Decisiones Espacial Web).
 >
@@ -127,10 +127,9 @@ SADEW, through its web Geovisualizer, automatically manages climatic data for pr
 
 ## Standardized Variable Samples
 
-Sample of variables and associated data that promote aridity: Perception, temperature, humidity, evapotranspiration, NDVI
+Sample of variables and associated data that promote aridity: a) Perception, b) evapotranspiration, c) humidity, d) temperature,  e) NDVI
 
-![img4](https://github.com/user-attachments/assets/2b52c1f3-dce6-486c-8b6b-64325818cab3)
-
+![image](https://github.com/user-attachments/assets/4726a22e-c527-4e6e-b581-9142b9d548c0)
 
 ## Contributors
 
