@@ -135,12 +135,20 @@ SADEW also generates prospective geospatial information of arid regions, using a
 ## Multi-level quantitative information
 Multi-level quantitative information on arid regions can also be generated and surface data in km2 can be displayed at different scales.
 ![image4](https://github.com/user-attachments/assets/14c59653-a3da-4cbe-a0d3-cbdc42cce394)
- ![image5](https://github.com/user-attachments/assets/c2dc7c60-c148-45c0-8029-c57df8f3d5e6)![image6](https://github.com/user-attachments/assets/0dd50017-3806-494d-addf-c38feaf27e99)![image7](https://github.com/user-attachments/assets/a0b9fa7c-795a-41b5-86ba-8ce4264de067)
+![image5](https://github.com/user-attachments/assets/d40e8782-cad3-47e6-9c53-f27fc9b66bfd)
+![image6](https://github.com/user-attachments/assets/4b8716bf-e123-4dfb-950b-6aa76ef4af04)
+
+**The data is downloadable in shapefile format**
+
+**Conclusions:** SADEW proposes an integral geospatial methodology for the analysis and monitoring of arid zones, which incorporates different tools, software, libraries, and techniques, being a key instrument for the environmental management of arid ecosystems, It generates multilevel indicators for the analysis of impact and vulnerability in retrospective and trend scenarios of aridity, which is presented as an alternative for the continuous and dynamic study of the arid regions of Mexico and that can be applicable worldwide and that will serve as support in territorial decision making and will also facilitate the development of public policies to mitigate the effect and impact of aridity in climate change. 
 
 
 
 
-The data is downloadable in shapefile format
+
+
+
+
 
 
 ## Contributors
