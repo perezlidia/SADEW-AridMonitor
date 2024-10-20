@@ -108,6 +108,7 @@ python -m pip install xlrd==2.0.1 #excel
 ```
 python -m pip install xlwt==1.3.0 #excel
 ```
+For automated data download, the Selenium package must be installed. The following command is used to perform the download and make it compatible with Python.
 ```
 python -m pip install selenium==3.141.0
 ```
