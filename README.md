@@ -122,14 +122,24 @@ C:\ProgramData\Boundless\OpenGeo\geoserver
 ```
 ## Page Visualization
 SADEW, through its web Geovisualizer, automatically manages climatic data for processing and thus generates information on arid regions in the Northwest of Mexico. You can enter the year to be visualized, if it is available, it will inform you of it, if not, it will proceed to generate it.
-
-![img3](https://github.com/user-attachments/assets/c492bd7c-0070-405b-8938-9c624403d28d)
+![img1](https://github.com/user-attachments/assets/c492bd7c-0070-405b-8938-9c624403d28d)
 
 ## Standardized Variable Samples
 
-Sample of variables and associated data that promote aridity: a) Perception, b) evapotranspiration, c) humidity, d) temperature,  e) NDVI
+Sample of variables and associated data that promote aridity: a) Perception, b) evapotranspiration, c) humidity, d) temperature,  e) NDVI.
+![image2](https://github.com/user-attachments/assets/4726a22e-c527-4e6e-b581-9142b9d548c0)
 
-![image](https://github.com/user-attachments/assets/4726a22e-c527-4e6e-b581-9142b9d548c0)
+SADEW also generates prospective geospatial information of arid regions, using an integrated algorithm, you only have to select the desired year and if it is there, it shows it, if not, it generates it.
+![image3](https://github.com/user-attachments/assets/e83915cb-89d6-496b-a439-b5dfa92b8027)
+
+Multi-level quantitative information on arid regions can also be generated and surface data in km2 can be displayed at different scales.
+![image4](https://github.com/user-attachments/assets/074b041d-c10d-4ed1-90a4-1d60511dc4e4) ![image5](https://github.com/user-attachments/assets/c2dc7c60-c148-45c0-8029-c57df8f3d5e6)![image6](https://github.com/user-attachments/assets/0dd50017-3806-494d-addf-c38feaf27e99)![image7](https://github.com/user-attachments/assets/a0b9fa7c-795a-41b5-86ba-8ce4264de067)
+
+
+
+
+The data is downloadable in shapefile format
+
 
 ## Contributors
 
