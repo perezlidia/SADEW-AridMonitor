@@ -121,12 +121,13 @@ In the utilities folder of this repository, you will find the backup of all the 
 C:\ProgramData\Boundless\OpenGeo\geoserver
 ```
 ## Page Visualization
+SADEW, through its web Geovisualizer, automatically manages climatic data for processing and thus generates information on arid regions in the Northwest of Mexico. You can enter the year to be visualized, if it is available, it will inform you of it, if not, it will proceed to generate it.
 
 ![img3](https://github.com/user-attachments/assets/c492bd7c-0070-405b-8938-9c624403d28d)
 
 ## Standardized Variable Samples
 
-Among the options, we will be able to analyze the mapping of the diverse standardized variables that are used for modeling and generating arid zones.
+Sample of variables and associated data that promote aridity: Perception, temperature, humidity, evapotranspiration, NDVI
 
 ![img4](https://github.com/user-attachments/assets/2b52c1f3-dce6-486c-8b6b-64325818cab3)
 
@@ -147,7 +148,8 @@ sa.monjardin12@info.uas.edu.mx
 
 ## Contact me
 
-Hello! I'm Lidia Yadira Perez Aguilar, Developer at SADEW. You can contact me through the following means:
-
+Developer at SADEW. 
+You can contact me through the following means:
+Lidia Yadira Perez Aguilar
 email: [lidiaperez@uas.edu.mx](lidiaperez@uas.edu.mx)
 
