@@ -135,8 +135,9 @@ SADEW also generates prospective geospatial information of arid regions, using a
 ## Multi-level quantitative information
 Multi-level quantitative information on arid regions can also be generated and surface data in km2 can be displayed at different scales.
 ![image4](https://github.com/user-attachments/assets/14c59653-a3da-4cbe-a0d3-cbdc42cce394)
-![image5](https://github.com/user-attachments/assets/d40e8782-cad3-47e6-9c53-f27fc9b66bfd)
-![image6](https://github.com/user-attachments/assets/4b8716bf-e123-4dfb-950b-6aa76ef4af04)
+![image5](https://github.com/user-attachments/assets/2b05c110-77ee-4c24-829c-b8a4683e1021)
+
+
 
 **The data is downloadable in shapefile format**
 
